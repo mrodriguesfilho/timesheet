@@ -1,0 +1,15 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/marciow/Library/Caches/JetBrains/Rider2023.2/resharper-host/temp/Rider/vAny/CoverageData/_TimeSheet.-32612645/Snapshot/snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c913131d_002Ddb55_002D48bd_002D9c26_002D6e293aa6b41b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from CreateTimeSheetEntryTest.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Or&gt;
+    &lt;ProjectFile&gt;2F827E90-E14C-4229-B356-B05E860CDC63/f:CreateTimeSheetEntryTest.cs&lt;/ProjectFile&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;xUnit::2F827E90-E14C-4229-B356-B05E860CDC63::net6.0::TimeSheet.Tests.AllocateHoursToProjectTest.It_should_allocate_hours_to_a_project&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::2F827E90-E14C-4229-B356-B05E860CDC63::net6.0::TimeSheet.Tests.AllocateHoursToProjectTest.It_shouldt_allocate_hours_to_two_projects&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::2F827E90-E14C-4229-B356-B05E860CDC63::net6.0::TimeSheet.Tests.AllocateHoursToProjectTest.It_shouldnt_allocate_more_hours_than_worked_hours_on_projects&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::2F827E90-E14C-4229-B356-B05E860CDC63::net6.0::TimeSheet.Tests.TimeSheetTest.It_shouldnt_compute_worked_hours_with_a_single_entry_in_two_consecutive_days&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::2F827E90-E14C-4229-B356-B05E860CDC63::net6.0::TimeSheet.Tests.AllocateHoursToProjectTest&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::2F827E90-E14C-4229-B356-B05E860CDC63::net6.0::TimeSheet.Tests.TimeSheetTest&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+  &lt;/Or&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
