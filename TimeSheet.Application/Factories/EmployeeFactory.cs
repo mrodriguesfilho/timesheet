@@ -1,6 +1,6 @@
 using TimeSheet.Domain.Entities;
 using TimeSheet.Domain.Factories;
-using TimeSheet.Domain.Repositories;
+using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Application.Factories;
 

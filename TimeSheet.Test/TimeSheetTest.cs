@@ -1,8 +1,7 @@
-using System.Reflection;
 using TimeSheet.Domain.Entities;
 using Xunit;
 
-namespace TimeSheet.Tests;
+namespace TimeSheet.Test;
 
 public class TimeSheetTest
 {

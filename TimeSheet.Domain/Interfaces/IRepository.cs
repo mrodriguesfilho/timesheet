@@ -1,4 +1,4 @@
-namespace TimeSheet.Domain.Repositories;
+namespace TimeSheet.Domain.Interfaces;
 
 public interface IRepository
 {

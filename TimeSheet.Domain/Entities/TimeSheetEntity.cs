@@ -58,4 +58,16 @@ public class TimeSheetEntity
         
         return dayOfWorkTimeSheetEntries;
     }
+
+    public List<TimeSheetEntry> GetAllTimeSheetEntries()
+    {
+        var timeSheetEntries = new List<TimeSheetEntry>();
+        
+        foreach (var timeSheetEntry in _timeEntriesByDay)
+        {
+            timeSheetEntries.AddRange(timeSheetEntries);
+        }
+
+        return timeSheetEntries;
+    }
 }

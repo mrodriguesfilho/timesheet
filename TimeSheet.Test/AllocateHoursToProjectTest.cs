@@ -1,8 +1,7 @@
-using System.Diagnostics;
 using TimeSheet.Domain.Entities;
 using Xunit;
 
-namespace TimeSheet.Tests;
+namespace TimeSheet.Test;
 
 public class AllocateHoursToProjectTest
 {
@@ -17,11 +16,11 @@ public class AllocateHoursToProjectTest
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 18, 00, 15));
         var workedTimeByDay = employee.TimeSheet.CalculateWorkedTime();
 
-        var project = new Project("McDonalds Project", new Dictionary<DateTime, TimeSpan>());
+        var project = new Project("McDonalds Project", "MCP", new Dictionary<DateTime, TimeSpan>());
         project.SetId(1);
         employee.AllocateToProject(project);
         employee.AllocateHoursToProject(project.Id, dayOfWork, TimeSpan.FromHours(8));
-        var allocatedProjects = employee.GetAllocatedProjects();
+        var allocatedProjects = employee.AllocatedProjects;
         var allocatedHoursByDay = employee.GetHoursAllocatedByProjectId(1);
         
         Assert.Single(workedTimeByDay);
@@ -44,12 +43,12 @@ public class AllocateHoursToProjectTest
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 18, 00, 15));
         var workedTimeByDay = employee.TimeSheet.CalculateWorkedTime();
 
-        var mcDonaldsProject = new Project("McDonalds Project", new Dictionary<DateTime, TimeSpan>());
+        var mcDonaldsProject = new Project("McDonalds Project", "MCP",new Dictionary<DateTime, TimeSpan>());
         mcDonaldsProject.SetId(1);
         employee.AllocateToProject(mcDonaldsProject);
         employee.AllocateHoursToProject(mcDonaldsProject.Id, dayOfWork, TimeSpan.FromHours(4));
         
-        var burguerKingProject = new Project("Burguer King Project", new Dictionary<DateTime, TimeSpan>());
+        var burguerKingProject = new Project("Burguer King Project", "BKPJ", new Dictionary<DateTime, TimeSpan>());
         burguerKingProject.SetId(2);
         employee.AllocateToProject(burguerKingProject);
         employee.AllocateHoursToProject(burguerKingProject.Id, dayOfWork, TimeSpan.FromHours(4));
@@ -77,12 +76,12 @@ public class AllocateHoursToProjectTest
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 18, 00, 15));
         var workedTimeByDay = employee.TimeSheet.CalculateWorkedTime();
 
-        var mcDonaldsProject = new Project("McDonalds Project", new Dictionary<DateTime, TimeSpan>());
+        var mcDonaldsProject = new Project("McDonalds Project", "MCP",new Dictionary<DateTime, TimeSpan>());
         mcDonaldsProject.SetId(1);
         employee.AllocateToProject(mcDonaldsProject);
         employee.AllocateHoursToProject(mcDonaldsProject.Id, dayOfWork, TimeSpan.FromHours(8));
         
-        var burguerKingProject = new Project("Burguer King Project", new Dictionary<DateTime, TimeSpan>());
+        var burguerKingProject = new Project("Burguer King Project", "BKPJ",new Dictionary<DateTime, TimeSpan>());
         burguerKingProject.SetId(2);
         employee.AllocateToProject(burguerKingProject);
         employee.AllocateHoursToProject(burguerKingProject.Id, dayOfWork, TimeSpan.FromHours(8));

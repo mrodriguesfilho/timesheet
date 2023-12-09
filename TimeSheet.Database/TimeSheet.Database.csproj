@@ -8,6 +8,9 @@
 
     <ItemGroup>
       <Compile Remove="Class1.cs" />
+      <Compile Remove="Repositories\**" />
+      <Compile Remove="AdoNet\Adapters\Interface\Result.cs" />
+      <Compile Remove="AdoNet\Adapters\Implementation\DatabaseAdapterDecorator.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -15,12 +18,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="EFCore\" />
+      <EmbeddedResource Remove="Repositories\**" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.25" />
+      <None Remove="Repositories\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Npgsql" Version="8.0.1" />
     </ItemGroup>
 
 </Project>

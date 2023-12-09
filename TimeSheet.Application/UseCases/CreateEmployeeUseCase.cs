@@ -3,7 +3,7 @@ using TimeSheet.Application.Interfaces;
 using TimeSheet.Application.Mappers;
 using TimeSheet.Application.StaticData;
 using TimeSheet.Domain.Factories;
-using TimeSheet.Domain.Repositories;
+using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Application.UseCases;
 
@@ -18,19 +18,18 @@ public class CreateEmployeeUseCase : IUseCase<CreateEmployeeInput, Result<Create
         _employeeFactory = employeeFactory;
     }
 
-    public async Task<Result<CreateEmployeeOutput>> Execute(CreateEmployeeInput createTimeSheetEntryInput)
+    public async Task<Result<CreateEmployeeOutput>> Execute(CreateEmployeeInput allocateEmployeeToProjectInput)
     {
-        var employee = await _employeeFactory.Create(createTimeSheetEntryInput.Name, createTimeSheetEntryInput.GovernmentIdentification);
-
+        var employee = await _employeeFactory.Create(allocateEmployeeToProjectInput.Name, allocateEmployeeToProjectInput.GovernmentIdentification);
+        
         if (employee.Id != default)
         {
-            var employeeAlreadyExistsOutput = EmployeeMapper.CreateEmployeeOutput(employee);
-            return Result<CreateEmployeeOutput>.Fail(employeeAlreadyExistsOutput, string.Format(ErrorMessages.EmployeeAlreadyExists, employee.GovernmentIdentification));
+            var employeeAlreadyExistsOutput = EmployeeMapper.MapToCreateEmployeeOutput(employee);
+            return Result.Fail(employeeAlreadyExistsOutput, string.Format(ErrorMessages.EmployeeAlreadyExists, employee.GovernmentIdentification));
         }
 
-        _employeeRepository.Create(employee);
-        await _employeeRepository.SaveChangesAsync();
-        var createEmployeeOutput = EmployeeMapper.CreateEmployeeOutput(employee);
+        await _employeeRepository.Create(employee);
+        var createEmployeeOutput = EmployeeMapper.MapToCreateEmployeeOutput(employee);
         return Result.Ok(createEmployeeOutput);
     }
 }

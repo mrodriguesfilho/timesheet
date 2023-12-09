@@ -3,7 +3,7 @@ using TimeSheet.Application.Interfaces;
 using TimeSheet.Application.Mappers;
 using TimeSheet.Application.StaticData;
 using TimeSheet.Domain.Factories;
-using TimeSheet.Domain.Repositories;
+using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Application.UseCases;
 
@@ -20,23 +20,23 @@ public class CreateTimeSheetEntryUseCase : IUseCase<CreateTimeSheetEntryInput, R
         _employeeRepository = employeeRepository;
     }
     
-    public async Task<Result<CreateTimeSheetEntryOutput>> Execute(CreateTimeSheetEntryInput createTimeSheetEntryInput)
+    public async Task<Result<CreateTimeSheetEntryOutput>> Execute(CreateTimeSheetEntryInput allocateEmployeeToProjectInput)
     {
-        var employee = await _employeeFactory.Create(createTimeSheetEntryInput.GovernmentIdentification);
+        var employee = await _employeeFactory.Create(allocateEmployeeToProjectInput.GovernmentIdentification);
 
         if (employee is null)
         {
             return Result<CreateTimeSheetEntryOutput>
                 .Fail(
                     default(CreateTimeSheetEntryOutput),
-                    string.Format(ErrorMessages.EmployeeNotfound, createTimeSheetEntryInput.GovernmentIdentification));
+                    string.Format(ErrorMessages.EmployeeNotfound, allocateEmployeeToProjectInput.GovernmentIdentification));
         }
         
-        employee.TimeSheet.AddTimeEntry(createTimeSheetEntryInput.timeEntry);
+        employee.TimeSheet.AddTimeEntry(allocateEmployeeToProjectInput.timeEntry);
 
         _employeeRepository.Update(employee);
         
-        var createTimeSheetEntryOutput = EmployeeMapper.CreateTimeSheetEntryOutput(employee);
+        var createTimeSheetEntryOutput = EmployeeMapper.MapToCreateTimeSheetEntryOutput(employee);
         
         return Result.Ok(createTimeSheetEntryOutput);
     }

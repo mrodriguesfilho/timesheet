@@ -3,9 +3,10 @@ using TimeSheet.Application.DTO;
 using TimeSheet.Application.Factories;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Application.UseCases;
-using TimeSheet.Database.Repositories.EFCore;
+using TimeSheet.Database.AdoNet;
+using TimeSheet.Database.AdoNet.Repositories;
 using TimeSheet.Domain.Factories;
-using TimeSheet.Domain.Repositories;
+using TimeSheet.Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -15,10 +16,14 @@ builder.Configuration
     .AddJsonFile("appsettings.json", false, true);
 
 var pgSqlConnectionString = builder.Configuration.GetConnectionString("PgSqlConnectionString");
-builder.Services.AddDbContext<EmployeeDbContext>(options => options.UseNpgsql(pgSqlConnectionString));
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddSingleton<IDatabaseAdapter>(new PostgresSqlAdapter(pgSqlConnectionString, 5));
+builder.Services.AddScoped<IEmployeeRepository, EmployeeAdoNetRepository>();
 builder.Services.AddScoped<IEmployeeFactory, EmployeeFactory>();
+builder.Services.AddScoped<IProjectDao, ProjectAdoNetDao>();
+builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 builder.Services.AddScoped<IUseCase<CreateEmployeeInput, Result<CreateEmployeeOutput>>, CreateEmployeeUseCase>();
+builder.Services.AddScoped<IUseCase<CreateProjectInput, Result<CreateProjectOutput>>, CreateProjectUseCase>();
+builder.Services.AddScoped<IUseCase<AllocateEmployeeToProjectInput, Result<AllocateEmployeeToProjectOutput>>, AllocateEmployeeToProjectUseCase>();
 
 var app = builder.Build();
 
