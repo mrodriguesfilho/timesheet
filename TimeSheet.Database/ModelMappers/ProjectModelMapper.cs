@@ -18,8 +18,7 @@ public static class ProjectModelMapper
 
     public static Project Map(ProjectModel projectModel)
     {
-        var project = new Project(projectModel.Name, projectModel.Ticker);
-        project.SetId(projectModel.Id);
+        var project = Project.CreateExistingProject(projectModel.Id, projectModel.Name, projectModel.Ticker);
         return project;
     }
 

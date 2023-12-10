@@ -6,10 +6,19 @@ namespace TimeSheet.Test;
 public class AllocateHoursToProjectTest
 {
     [Fact]
+    public void It_should_allocate_an_employee_to_a_project()
+    {
+        var employee = new Employee(1, "João Pedro", "111-222-333-00", new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
+        var project = Project.CreateExistingProject(1, "McDonald's", "MCP");
+        employee.AllocateToProject(project);
+        
+    }
+    
+    [Fact]
     public void It_should_allocate_hours_to_a_project()
     {
         var dayOfWork = new DateTime(2023, 12, 04);
-        var employee = new Employee("João Pedro", "111-222-333-00", new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
+        var employee = new Employee(1, "João Pedro", "111-222-333-00", new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 08, 05, 30));
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 12, 05, 15));
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 13, 15, 15));
@@ -36,7 +45,7 @@ public class AllocateHoursToProjectTest
     public void It_should_allocate_hours_to_two_projects()
     {
         var dayOfWork = new DateTime(2023, 12, 04);
-        var employee = new Employee("João Pedro", "111-222-333-00", new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
+        var employee = new Employee(1, "João Pedro", "111-222-333-00", new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 08, 05, 30));
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 12, 05, 15));
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 13, 15, 15));
@@ -69,7 +78,7 @@ public class AllocateHoursToProjectTest
     public void It_shouldnt_allocate_more_hours_than_worked_hours_on_projects()
     {
         var dayOfWork = new DateTime(2023, 12, 04);
-        var employee = new Employee("João Pedro", "111-222-333-00", new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
+        var employee = new Employee(1,"João Pedro", "111-222-333-00", new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 08, 05, 30));
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 12, 05, 15));
         employee.TimeSheet.AddTimeEntry(new DateTime(2023, 12, 04, 13, 15, 15));

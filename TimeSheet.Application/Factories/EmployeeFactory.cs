@@ -31,13 +31,22 @@ public class EmployeeFactory : IEmployeeFactory
         return employee;
     }
 
+    public async Task<Employee?> CreateWithTimeSheetEntries(string governmentIdentification, DateTime startDate, DateTime endDate)
+    {
+        var employee = await _employeeRepository.GetByGovernmentIdWithTimeSheetEntries(governmentIdentification, startDate, endDate);
+
+        if (employee is not null) return employee;
+
+        return employee;
+    }
+
     private async Task<Employee?> GetEmployeeInstance(string governmentIdentification, string name = "")
     {
         var employee = await _employeeRepository.GetByGovernmentId(governmentIdentification);
 
         if (employee is not null) return employee;
 
-        if (!string.IsNullOrEmpty(name)) employee = new Employee(name, governmentIdentification);
+        if (!string.IsNullOrEmpty(name)) employee = Employee.CreateNewEmployee(name, governmentIdentification);
 
         return employee;
     } 

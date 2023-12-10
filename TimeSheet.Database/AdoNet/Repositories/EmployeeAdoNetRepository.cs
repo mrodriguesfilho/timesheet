@@ -1,6 +1,7 @@
 using System.Text;
 using TimeSheet.Database.AdoNet.Adapters.Interface;
 using TimeSheet.Database.AdoNet.Queries;
+using TimeSheet.Database.AdoNet.Utils;
 using TimeSheet.Database.Builders;
 using TimeSheet.Database.Extensions;
 using TimeSheet.Database.ModelMappers;
@@ -32,7 +33,7 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
 
     public async Task Update(Employee employee)
     {
-        // await AddNewTimeSheetEntries(employee);
+        await AddNewTimeSheetEntries(employee);
         await UpdateEmployeeProjects(employee);
     }
 
@@ -86,11 +87,6 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
         await _databaseAdapter.ExecuteNonQueryAsync(query);
     }
 
-    public Task<Employee?> GetById(long id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<Employee?> GetByGovernmentId(string governmentIdentification)
     {
         var selectEmployeeQuery = string.Format(EmployeeQueries.SELECT_EMPLOYEE_BY_GOVERNMENT_CODE, governmentIdentification);
@@ -114,29 +110,65 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
         return employee;
     }
 
+    public async Task<Employee?> GetByGovernmentIdWithTimeSheetEntries(string governmentIdentification, DateTime startDate, DateTime endDate)
+    {
+        var selectEmployeeQuery = string.Format(EmployeeQueries.SELECT_EMPLOYEE_BY_GOVERNMENT_CODE, governmentIdentification);
+        var selectEmployeeDatabaseResult = await _databaseAdapter.ExecuteQueryAsync(selectEmployeeQuery, dataRecord => EmployeeModelMapper.Map(dataRecord));
+
+        if (!selectEmployeeDatabaseResult.Success) return null;
+
+        var employeeModel = selectEmployeeDatabaseResult.Value.FirstOrDefault();
+        
+        var allocatedProjectsDatabaseResult =
+            await _databaseAdapter.ExecuteQueryAsync<ProjectModel>(string.Format(ProjectQueries.SELECT_ALLOCATED_PROJECTS_BY_EMPLOYEE_ID, employeeModel.Id),
+                dataRecord => ProjectModelMapper.MapWithAllocation(dataRecord));
+
+        var timeSheetEntriesDatabaseResult =
+            await _databaseAdapter.ExecuteQueryAsync<TimeSheetEntryModel>(string.Format(TimeSheetEntryQueries.SELECT_ENTRIES_BY_DATE, employeeModel.Id, startDate,
+                endDate), dataRecord => TimeSheetEntryMapper.Map(dataRecord));
+        
+        var employeeBuilder = new EmployeeBuilder();
+
+        if (timeSheetEntriesDatabaseResult.Success)
+            employeeBuilder = employeeBuilder.BuildWithTimeSheetEntries(timeSheetEntriesDatabaseResult.Value);
+        
+        if (allocatedProjectsDatabaseResult.Success) 
+            employeeBuilder = employeeBuilder.BuildWithAllocatedProjects(allocatedProjectsDatabaseResult.Value);
+        
+        var employee = employeeBuilder
+            .Build(employeeModel);
+
+        return employee;
+    }
+
     public async Task AddNewTimeSheetEntries(Employee employee)
     {
-        var timeSheetEntriesNotAdded = employee.TimeSheet?.GetAllTimeSheetEntries().Where(x => x.Id == 0);
+        var timeSheetEntriesNotAdded = employee.TimeSheet?.GetAllTimeSheetEntries().Where(x => x.Id == 0).ToList();
 
         if (timeSheetEntriesNotAdded is null) return;
 
         var insertNewTimeSheetEntrySb = new StringBuilder();
         insertNewTimeSheetEntrySb.Append(TimeSheetEntryQueries.INSERT_TIME_ENTRY_BASE);
-        foreach (var timeSheetEntry in timeSheetEntriesNotAdded)
+
+        for (var index = 0; index < timeSheetEntriesNotAdded.Count; index++)
         {
             insertNewTimeSheetEntrySb.AppendFormat(
-                TimeSheetEntryQueries.INSERT_TIME_ENTRY_BASE,
+                TimeSheetEntryQueries.INSERT_TIME_ENTRY_VALUE,
                 employee.Id,
-                timeSheetEntry.StartDate,
-                timeSheetEntry.EndDate,
-                timeSheetEntry.WorkedHours,
-                timeSheetEntry.HoursAllocated,
-                timeSheetEntry.IsCompleted
+                timeSheetEntriesNotAdded[index].StartDate.ToStringSingleQuoted(),
+                timeSheetEntriesNotAdded[index].EndDate.ToStringSingleQuoted(),
+                timeSheetEntriesNotAdded[index].WorkedHours.ToStringSingleQuoted(),
+                timeSheetEntriesNotAdded[index].HoursAllocated.ToStringSingleQuoted(),
+                timeSheetEntriesNotAdded[index].IsCompleted
             );
+            
+            if(index + 1 != timeSheetEntriesNotAdded.Count)
+                insertNewTimeSheetEntrySb.Append(',');
         }
-
+        
         insertNewTimeSheetEntrySb.Append(';');
         var builtInsertNewTimeSheetEntryQuery = insertNewTimeSheetEntrySb.ToString();
 
+        await _databaseAdapter.ExecuteNonQueryAsync(builtInsertNewTimeSheetEntryQuery);
     }
 }

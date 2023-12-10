@@ -4,15 +4,13 @@ public class Employee : BaseEntity<long>
 {
     public string Name { get; init; }
     public string GovernmentIdentification { get; init; }
-    public TimeSheetEntity TimeSheet { get; private set; }
+    public TimeSheetEntity TimeSheet { get; init; }
     public List<Project> AllocatedProjects { get; init; }
-
-    public Employee(string name, string governmentIdentification)
+    
+    public static Employee CreateNewEmployee(string name, string governmentIdentification)
     {
-        Name = name;
-        GovernmentIdentification = governmentIdentification;
-        TimeSheet = new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>());
-        AllocatedProjects = new List<Project>();
+        var newEmployee = new Employee(0, name, governmentIdentification, new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
+        return newEmployee;
     }
     
     public Employee(long id, string name, string governmentIdentification, TimeSheetEntity timeSheetEntity, List<Project>? allocatedProjects)
@@ -33,7 +31,18 @@ public class Employee : BaseEntity<long>
         return true;
 
     }
+    
+    public bool DeallocateFromProject(long projectId)
+    {
+        var index = AllocatedProjects.FindIndex(x => x.Id == projectId);
 
+        if (index == -1) return false;
+
+        AllocatedProjects[index].SetDeallocationDate();
+
+        return true;
+    }
+    
     public void AllocateHoursToProject(long projectId, DateTime dayOfWork, TimeSpan hoursToAllocate)
     {
         var timeSheetEntriesOfTheDay = TimeSheet.GetTimeSheetEntriesByDayOfWork(dayOfWork);

@@ -37,7 +37,7 @@ public class ProjectFactory : IProjectFactory
 
         if (project is not null) return project;
 
-        if (!string.IsNullOrEmpty(ticker) && !string.IsNullOrEmpty(name)) project = new Project(name, ticker);
+        if (!string.IsNullOrEmpty(ticker) && !string.IsNullOrEmpty(name)) project = Project.CreateNewProject(name, ticker);
 
         return project;
     }

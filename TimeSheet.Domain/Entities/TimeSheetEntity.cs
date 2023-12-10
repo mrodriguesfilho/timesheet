@@ -65,7 +65,7 @@ public class TimeSheetEntity
         
         foreach (var timeSheetEntry in _timeEntriesByDay)
         {
-            timeSheetEntries.AddRange(timeSheetEntries);
+            timeSheetEntries.AddRange(timeSheetEntry.Value);
         }
 
         return timeSheetEntries;

@@ -22,7 +22,7 @@ public class CreateTimeSheetEntryUseCase : IUseCase<CreateTimeSheetEntryInput, R
     
     public async Task<Result<CreateTimeSheetEntryOutput>> Execute(CreateTimeSheetEntryInput allocateEmployeeToProjectInput)
     {
-        var employee = await _employeeFactory.Create(allocateEmployeeToProjectInput.GovernmentIdentification);
+        var employee = await _employeeFactory.CreateWithTimeSheetEntries(allocateEmployeeToProjectInput.GovernmentIdentification, DateTime.Today, DateTime.Today.AddHours(23).AddMinutes(59).AddSeconds(59));
 
         if (employee is null)
         {
@@ -34,7 +34,7 @@ public class CreateTimeSheetEntryUseCase : IUseCase<CreateTimeSheetEntryInput, R
         
         employee.TimeSheet.AddTimeEntry(allocateEmployeeToProjectInput.timeEntry);
 
-        _employeeRepository.Update(employee);
+        await _employeeRepository.Update(employee);
         
         var createTimeSheetEntryOutput = EmployeeMapper.MapToCreateTimeSheetEntryOutput(employee);
         

@@ -2,32 +2,40 @@ namespace TimeSheet.Domain.Entities;
 
 public class Project : BaseEntity<long>
 {
-    public string Name { get; init; }
-    public string Ticker { get; init; }
+    public string Name { get; private set; }
+    public string Ticker { get; private set; }
     public DateTime AllocationDate { get; private set; }
     public DateTime? DeallocationDate { get; private set; }
     public Dictionary<DateTime, TimeSpan> WorkedHoursByDay { get; init; }
 
-    public Project(string name, string ticker)
+    private Project(){}
+    
+    public static Project CreateNewProject(string name, string ticker)
     {
-        Name = name;
-        Ticker = ticker;
+        var newProject = new Project();
+        newProject.Name = name;
+        newProject.Ticker = ticker;
+        return newProject;
     }
 
-    public Project(long id, string name, string ticker)
+    public static Project CreateExistingProject(long id, string name, string ticker)
     {
-        Id = id;
-        Name = name;
-        Ticker = ticker;
+        var existingProject = CreateNewProject(name, ticker);
+        existingProject.Id = id;
+        return existingProject;
     }
     
-    public Project(long id, string name, string ticker, DateTime allocationDate, DateTime? deAllocationDate = null)
+    public static Project CreateExistingProjectWithAllocation(
+        long id, 
+        string name, 
+        string ticker, 
+        DateTime allocationDate, 
+        DateTime? deAllocationDate = null)
     {
-        Id = id;
-        Name = name;
-        Ticker = ticker;
-        AllocationDate = allocationDate;
-        DeallocationDate = deAllocationDate;
+        var existingProjectWithAllocation = CreateExistingProject(id, name, ticker);
+        existingProjectWithAllocation.AllocationDate = allocationDate;
+        existingProjectWithAllocation.DeallocationDate = deAllocationDate;
+        return existingProjectWithAllocation;
     }
     
     public Project(string name, string ticker, Dictionary<DateTime, TimeSpan> workedHoursByDay)
@@ -65,5 +73,10 @@ public class Project : BaseEntity<long>
     public void SetAllocationDate()
     {
         AllocationDate = DateTime.Now;
+    }
+
+    public void SetDeallocationDate()
+    {
+        DeallocationDate = DateTime.Now;
     }
 }

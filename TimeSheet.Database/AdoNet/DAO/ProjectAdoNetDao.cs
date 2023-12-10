@@ -33,7 +33,7 @@ public class ProjectAdoNetDao : IProjectDao
         if (!databaseResult.Success || !databaseResult.Value.Any()) return null;
 
         var projectModel = databaseResult.Value.FirstOrDefault();
-        var project = new Project(
+        var project = Project.CreateExistingProject(
             projectModel.Id,
             projectModel.Name,
             projectModel.Ticker

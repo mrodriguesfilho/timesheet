@@ -6,6 +6,7 @@ namespace TimeSheet.Database.Builders;
 public class EmployeeBuilder
 {
     private List<ProjectModel>? _projectModelList;
+    private List<TimeSheetEntryModel>? _timeSheetEntryModelList;
     
     public EmployeeBuilder BuildWithAllocatedProjects(List<ProjectModel> projectModelList)
     {
@@ -13,13 +14,20 @@ public class EmployeeBuilder
         return this;
     }
     
+    public EmployeeBuilder BuildWithTimeSheetEntries(List<TimeSheetEntryModel> timeSheetEntryModelList)
+    {
+        _timeSheetEntryModelList = timeSheetEntryModelList;
+        return this;
+    }
+    
     public Employee Build(EmployeeModel employeeModel)
     {
         List<Project> projects = null;
-  
+        TimeSheetEntity timeSheetEntity = null;
+        
         if (_projectModelList is not null)
         {
-            projects = _projectModelList.ConvertAll(projectModel => new Project(
+            projects = _projectModelList.ConvertAll(projectModel => Project.CreateExistingProjectWithAllocation(
                 projectModel.Id,
                 projectModel.Name,
                 projectModel.Ticker,
@@ -27,6 +35,11 @@ public class EmployeeBuilder
                 projectModel.DeallocationDate));
         }
 
+        if (_timeSheetEntryModelList is not null)
+        {
+
+        }
+        
         var employee = new Employee(
             employeeModel.Id,
             employeeModel.Name,
@@ -36,6 +49,4 @@ public class EmployeeBuilder
         
         return employee;
     }
-
-
 }

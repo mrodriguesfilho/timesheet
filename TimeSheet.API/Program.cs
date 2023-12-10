@@ -1,9 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using TimeSheet.Application.DTO;
 using TimeSheet.Application.Factories;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Application.UseCases;
-using TimeSheet.Database.AdoNet;
 using TimeSheet.Database.AdoNet.Adapters.Implementation;
 using TimeSheet.Database.AdoNet.Adapters.Interface;
 using TimeSheet.Database.AdoNet.DAO;
@@ -27,6 +25,7 @@ builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 builder.Services.AddScoped<IUseCase<CreateEmployeeInput, Result<CreateEmployeeOutput>>, CreateEmployeeUseCase>();
 builder.Services.AddScoped<IUseCase<CreateProjectInput, Result<CreateProjectOutput>>, CreateProjectUseCase>();
 builder.Services.AddScoped<IUseCase<AllocateEmployeeToProjectInput, Result<AllocateEmployeeToProjectOutput>>, AllocateEmployeeToProjectUseCase>();
+builder.Services.AddScoped<IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>>, CreateTimeSheetEntryUseCase>();
 
 var app = builder.Build();
 
