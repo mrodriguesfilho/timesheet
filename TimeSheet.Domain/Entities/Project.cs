@@ -4,6 +4,8 @@ public class Project : BaseEntity<long>
 {
     public string Name { get; init; }
     public string Ticker { get; init; }
+    public DateTime AllocationDate { get; private set; }
+    public DateTime? DeallocationDate { get; private set; }
     public Dictionary<DateTime, TimeSpan> WorkedHoursByDay { get; init; }
 
     public Project(string name, string ticker)
@@ -17,6 +19,15 @@ public class Project : BaseEntity<long>
         Id = id;
         Name = name;
         Ticker = ticker;
+    }
+    
+    public Project(long id, string name, string ticker, DateTime allocationDate, DateTime? deAllocationDate = null)
+    {
+        Id = id;
+        Name = name;
+        Ticker = ticker;
+        AllocationDate = allocationDate;
+        DeallocationDate = deAllocationDate;
     }
     
     public Project(string name, string ticker, Dictionary<DateTime, TimeSpan> workedHoursByDay)
@@ -49,5 +60,10 @@ public class Project : BaseEntity<long>
         
             WorkedHoursByDay.Add(dayOfWork, hoursAvailableToAllocate);
         }
+    }
+
+    public void SetAllocationDate()
+    {
+        AllocationDate = DateTime.Now;
     }
 }

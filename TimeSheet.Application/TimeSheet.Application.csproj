@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TimeSheet.Database\TimeSheet.Database.csproj" />
       <ProjectReference Include="..\TimeSheet.Domain\TimeSheet.Domain.csproj" />
     </ItemGroup>
 

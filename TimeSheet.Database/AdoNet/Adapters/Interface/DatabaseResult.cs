@@ -1,4 +1,4 @@
-namespace TimeSheet.Database.AdoNet;
+namespace TimeSheet.Database.AdoNet.Adapters.Interface;
 
 public class DatabaseResult
 {

@@ -1,4 +1,5 @@
 using System.Data;
+using TimeSheet.Database.Extensions;
 using TimeSheet.Database.Models;
 using TimeSheet.Domain.Entities;
 
@@ -22,12 +23,22 @@ public static class ProjectModelMapper
         return project;
     }
 
-    public static Project Map(IDataRecord dataRecord)
+    public static ProjectModel Map(IDataRecord dataRecord)
     {
-        var projectId = Convert.ToInt64(dataRecord["id_project"]);
-        var projectName = Convert.ToString(dataRecord["nm_project"]);
-        var projectTicker = Convert.ToString(dataRecord["cd_project_ticker"]);
-        var project = new Project(projectId, projectName, projectTicker);
-        return project;
+        var projectModel = new ProjectModel();
+        projectModel.Id = Convert.ToInt64(dataRecord["id_project"]);
+        projectModel.Name = Convert.ToString(dataRecord["nm_project"]);
+        projectModel.Ticker = Convert.ToString(dataRecord["cd_project_ticker"]);
+
+        return projectModel;
+    }
+    
+    public static ProjectModel MapWithAllocation(IDataRecord dataRecord)
+    {
+        var projectModel = Map(dataRecord);
+        projectModel.AllocationDate = Convert.ToDateTime(dataRecord["dt_allocated"]);
+        projectModel.DeallocationDate = dataRecord["dt_deallocated"] == DBNull.Value ? null : Convert.ToDateTime(dataRecord["dt_dealloacted"]);
+
+        return projectModel;
     }
 }

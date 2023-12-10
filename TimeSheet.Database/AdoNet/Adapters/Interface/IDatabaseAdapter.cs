@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace TimeSheet.Database.AdoNet;
+namespace TimeSheet.Database.AdoNet.Adapters.Interface;
 
 public interface IDatabaseAdapter
 {

@@ -1,5 +1,7 @@
 using System.Text;
+using TimeSheet.Database.AdoNet.Adapters.Interface;
 using TimeSheet.Database.AdoNet.Queries;
+using TimeSheet.Database.Builders;
 using TimeSheet.Database.Extensions;
 using TimeSheet.Database.ModelMappers;
 using TimeSheet.Database.Models;
@@ -76,7 +78,7 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
             foreach (var newProject in newProjects)
             {
                 stringBuilder.AppendFormat(EmployeeProjectsQueries.ALLOCATE_EMPLOYEE_TO_PROJECT_VALUES, employee.Id, newProject.Id,
-                    DateTime.Now.ToPT0H0M0S());
+                    newProject.AllocationDate);
             }
         }
 
@@ -91,12 +93,25 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
 
     public async Task<Employee?> GetByGovernmentId(string governmentIdentification)
     {
-        var query = string.Format(EmployeeQueries.SELECT_EMPLOYEE_BY_GOVERNMENT_CODE, governmentIdentification);
-        var databaBaseResult = await _databaseAdapter.ExecuteQueryAsync(query, dataRecord => EmployeeModelMapper.Map(dataRecord));
+        var selectEmployeeQuery = string.Format(EmployeeQueries.SELECT_EMPLOYEE_BY_GOVERNMENT_CODE, governmentIdentification);
+        var selectEmployeeDatabaseResult = await _databaseAdapter.ExecuteQueryAsync(selectEmployeeQuery, dataRecord => EmployeeModelMapper.Map(dataRecord));
 
-        if (!databaBaseResult.Success) return null;
+        if (!selectEmployeeDatabaseResult.Success) return null;
+
+        var employeeModel = selectEmployeeDatabaseResult.Value.FirstOrDefault();
         
-        return databaBaseResult.Value.FirstOrDefault();
+        var allocatedProjectsDatabaseResult =
+            await _databaseAdapter.ExecuteQueryAsync<ProjectModel>(string.Format(ProjectQueries.SELECT_ALLOCATED_PROJECTS_BY_EMPLOYEE_ID, employeeModel.Id),
+                dataRecord => ProjectModelMapper.MapWithAllocation(dataRecord));
+
+        var employeeBuilder = new EmployeeBuilder();
+
+        if (allocatedProjectsDatabaseResult.Success) employeeBuilder = employeeBuilder.BuildWithAllocatedProjects(allocatedProjectsDatabaseResult.Value);
+        
+        var employee = employeeBuilder
+            .Build(employeeModel);
+
+        return employee;
     }
 
     public async Task AddNewTimeSheetEntries(Employee employee)

@@ -11,6 +11,8 @@ public static class ProjectMapper
         createProjectOutput.Id = project.Id;
         createProjectOutput.Name = project.Name;
         createProjectOutput.Ticker = project.Ticker;
+        createProjectOutput.AllocationDate = project.AllocationDate;
+        createProjectOutput.DeallocationDate = project.DeallocationDate;
         return createProjectOutput;
     }
     

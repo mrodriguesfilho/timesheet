@@ -37,7 +37,9 @@ public class AllocateEmployeeToProjectUseCase : IUseCase<AllocateEmployeeToProje
                 string.Format(ErrorMessages.EmployeeNotfound,
                     allocateEmployeeToProjectInput.EmployeeGovernmentIdentification));
         
-        employee.AllocateToProject(project);
+        var isAllocated = employee.AllocateToProject(project);
+        
+        if(!isAllocated) return Result.Fail(EmployeeMapper.MapToAllocateEmployeeToProjectOutput(employee), $"Employee already allocated to project {project.Ticker}");
         
         await _employeeRepository.Update(employee);
 

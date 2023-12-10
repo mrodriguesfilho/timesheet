@@ -19,19 +19,16 @@ public static class EmployeeModelMapper
     public static Employee Map(EmployeeModel employeeModel)
     {
         var projects = employeeModel.AllocatedProjects?.ToList().ConvertAll(x => ProjectModelMapper.Map(x)) ?? new List<Project>();
-        var employee = new Employee(employeeModel.Name, employeeModel.GovernmentIdentification, new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), projects);
-        employee.SetId(employeeModel.Id);
+        var employee = new Employee(employeeModel.Id, employeeModel.Name, employeeModel.GovernmentIdentification, new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), projects);
         return employee;
     }
 
-    public static Employee Map(IDataRecord dataRecord)
+    public static EmployeeModel Map(IDataRecord dataRecord)
     {
-        var employeeId = Convert.ToInt64(dataRecord["id_employee"]);
-        var employeeName = Convert.ToString(dataRecord["nm_employee"]);
-        var employeeGovernmentCode = Convert.ToString(dataRecord["cd_employee_government"]);
-        
-        var employee = new Employee(employeeName, employeeGovernmentCode, new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
-        employee.SetId(employeeId);
-        return employee;
+        var employeeModel = new EmployeeModel();
+        employeeModel.Id = Convert.ToInt64(dataRecord["id_employee"]);
+        employeeModel.Name = Convert.ToString(dataRecord["nm_employee"]);
+        employeeModel.GovernmentIdentification = Convert.ToString(dataRecord["cd_employee_government"]);
+        return employeeModel;
     }
 }

@@ -15,20 +15,23 @@ public class Employee : BaseEntity<long>
         AllocatedProjects = new List<Project>();
     }
     
-    public Employee(string name, string governmentIdentification, TimeSheetEntity timeSheetEntity, List<Project> allocatedProjects)
+    public Employee(long id, string name, string governmentIdentification, TimeSheetEntity timeSheetEntity, List<Project>? allocatedProjects)
     {
+        Id = id;
         Name = name;
         GovernmentIdentification = governmentIdentification;
         TimeSheet = new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>());
-        AllocatedProjects = allocatedProjects;
+        AllocatedProjects = allocatedProjects ?? new List<Project>();
     }
 
-    public void AllocateToProject(Project project)
+    public bool AllocateToProject(Project project)
     {
-        if (!AllocatedProjects.Contains(project))
-        {
-            AllocatedProjects.Add(project);
-        }
+        if (AllocatedProjects.FirstOrDefault(x => x.Id == project.Id) is not null) return false;
+        
+        project.SetAllocationDate();
+        AllocatedProjects.Add(project);
+        return true;
+
     }
 
     public void AllocateHoursToProject(long projectId, DateTime dayOfWork, TimeSpan hoursToAllocate)

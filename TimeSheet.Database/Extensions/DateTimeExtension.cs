@@ -8,8 +8,10 @@ public static class DateTimeExtension
         return $"PT{timeSpan.Hours}H{timeSpan.Minutes}M{timeSpan.Seconds}S";
     }
     
-    public static DateTime FromPT0H0M0S(this string ptFormat)
+    public static DateTime? FromPT0H0M0S(this string ptFormat)
     {
+        if (string.IsNullOrEmpty(ptFormat)) return null;
+        
         var timeSpan = ParsePTFormat(ptFormat);
         return DateTime.MinValue.Add(timeSpan);
     }

@@ -1,8 +1,8 @@
 using System.Data;
 using Npgsql;
-using TimeSheet.Domain.Entities;
+using TimeSheet.Database.AdoNet.Adapters.Interface;
 
-namespace TimeSheet.Database.AdoNet;
+namespace TimeSheet.Database.AdoNet.Adapters.Implementation;
 
 public class PostgresSqlAdapter : IDatabaseAdapter
 {
@@ -39,6 +39,9 @@ public class PostgresSqlAdapter : IDatabaseAdapter
         var dataTableReader = dataTable.CreateDataReader();
 
         var resultList = new List<T>();
+
+        // if (!dataTableReader.HasRows) return DatabaseResult.Fail(resultList, "No matching result rows found on DB for the given query", null);
+        
         while (await dataTableReader.ReadAsync())
         {
             var resultEntry = mapper(dataTableReader);
