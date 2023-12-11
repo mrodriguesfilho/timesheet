@@ -145,7 +145,7 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
     {
         var timeSheetEntriesNotAdded = employee.TimeSheet?.GetAllTimeSheetEntries().Where(x => x.Id == 0).ToList();
 
-        if (timeSheetEntriesNotAdded is null) return;
+        if (timeSheetEntriesNotAdded is null || !timeSheetEntriesNotAdded.Any()) return;
 
         var insertNewTimeSheetEntrySb = new StringBuilder();
         insertNewTimeSheetEntrySb.Append(TimeSheetEntryQueries.INSERT_TIME_ENTRY_BASE);

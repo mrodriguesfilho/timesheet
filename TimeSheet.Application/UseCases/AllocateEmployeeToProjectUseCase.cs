@@ -22,16 +22,20 @@ public class AllocateEmployeeToProjectUseCase : IUseCase<AllocateEmployeeToProje
     
     public async Task<Result<AllocateEmployeeToProjectOutput>> Execute(AllocateEmployeeToProjectInput allocateEmployeeToProjectInput)
     {
-        var project = await _projectFactory.Create(allocateEmployeeToProjectInput.ProjectTicker);
+        var projectCreateTask = _projectFactory.Create(allocateEmployeeToProjectInput.ProjectTicker);
+        var employeeCreateTask = _employeeFactory.Create(allocateEmployeeToProjectInput.EmployeeGovernmentIdentification);
 
+        await Task.WhenAll(projectCreateTask, employeeCreateTask);
+
+        var employee = employeeCreateTask.Result;
+        var project = projectCreateTask.Result;
+        
         if (project is null)
             return Result.Fail(
                 default(AllocateEmployeeToProjectOutput),
                 string.Format(ErrorMessages.ProjectNotFound,
                     allocateEmployeeToProjectInput.ProjectTicker));
-
-        var employee = await _employeeFactory.Create(allocateEmployeeToProjectInput.EmployeeGovernmentIdentification);
-
+        
         if (employee is null)
             return Result.Fail(default(AllocateEmployeeToProjectOutput),
                 string.Format(ErrorMessages.EmployeeNotfound,
