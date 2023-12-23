@@ -25,7 +25,7 @@ builder.Services.AddScoped<IProjectFactory, ProjectFactory>();
 builder.Services.AddScoped<IUseCase<CreateEmployeeInput, Result<CreateEmployeeOutput>>, CreateEmployeeUseCase>();
 builder.Services.AddScoped<IUseCase<CreateProjectInput, Result<CreateProjectOutput>>, CreateProjectUseCase>();
 builder.Services.AddScoped<IUseCase<AllocateEmployeeToProjectInput, Result<AllocateEmployeeToProjectOutput>>, AllocateEmployeeToProjectUseCase>();
-builder.Services.AddScoped<IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>>, CreateTimeSheetEntryUseCase>();
+builder.Services.AddScoped<IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>>, AddTimeSheetEntryUseCase>();
 
 var app = builder.Build();
 

@@ -12,9 +12,9 @@ public static class TimeSheetEntryMapper
         timeSheetEntryModel.Id = Convert.ToInt64(dataRecord["id_entry"]);
         timeSheetEntryModel.EmployeeId = Convert.ToInt64(dataRecord["id_employee"]);
         timeSheetEntryModel.WorkStartedAt = Convert.ToDateTime(dataRecord["dt_work_start"]);
-        timeSheetEntryModel.WorkEndendAt = Convert.ToDateTime(dataRecord["dt_work_end"]);
-        timeSheetEntryModel.WorkedHours = Convert.ToDateTime(dataRecord["nr_workd_hours"]);
-        timeSheetEntryModel.AllocatedHours = Convert.ToDateTime(dataRecord["nr_allocated_hours"]);
+        timeSheetEntryModel.WorkEndendAt = dataRecord["dt_work_end"] == DBNull.Value ? null : Convert.ToDateTime(dataRecord["dt_work_end"]);
+        // timeSheetEntryModel.WorkedHours = dataRecord["nr_worked_hours"] == DBNull.Value ? null : Convert.ToDateTime(dataRecord["nr_worked_hours"]);
+        // timeSheetEntryModel.AllocatedHours = dataRecord["nr_allocated_hours"] == DBNull.Value ? null : new DateTime((TimeSpan)dataRecord["nr_allocated_hours"]);
         timeSheetEntryModel.IsCompleted = Convert.ToBoolean(dataRecord["fl_iscompleted"]);
         return timeSheetEntryModel;
     }

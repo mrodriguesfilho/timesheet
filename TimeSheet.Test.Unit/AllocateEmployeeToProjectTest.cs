@@ -1,7 +1,7 @@
 using TimeSheet.Domain.Entities;
 using Xunit;
 
-namespace TimeSheet.Test;
+namespace TimeSheet.Test.Unit;
 
 public class AllocateEmployeeToProjectTest
 {

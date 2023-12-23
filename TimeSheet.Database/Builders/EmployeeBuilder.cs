@@ -37,7 +37,15 @@ public class EmployeeBuilder
 
         if (_timeSheetEntryModelList is not null)
         {
+            var timeSheetEntryList = _timeSheetEntryModelList.ConvertAll(timeEntry => new TimeSheetEntry(
+                    timeEntry.WorkStartedAt,
+                    timeEntry.WorkEndendAt,
+                    timeEntry.WorkedHours,
+                    timeEntry.AllocatedHours,
+                    timeEntry.IsCompleted
+                ));
 
+            var timeSheet = new TimeSheetEntity();
         }
         
         var employee = new Employee(

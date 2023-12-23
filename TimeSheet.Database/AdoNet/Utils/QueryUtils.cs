@@ -6,8 +6,16 @@ public static class QueryUtils
 {
     public static string ToStringSingleQuoted(this object input)
     {
-        if (input is null) return "null";
-        
-        return $"'{input}'";
+        return input is null ? "null" : $"'{input}'";
+    }
+
+    public static string ToDateTimeStyle(this DateTime datetime)
+    {
+        return datetime == default ? "null" : $"'{datetime:yyyy-MM-dd HH:mm:ss}'";
+    }
+    
+    public static string ToDateTimeStyle(this DateTime? datetime)
+    {
+        return datetime is null ? "null" : $"'{datetime.GetValueOrDefault():yyyy-MM-dd HH:mm:ss}'";
     }
 }

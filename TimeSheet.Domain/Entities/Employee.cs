@@ -4,7 +4,7 @@ public class Employee : BaseEntity<long>
 {
     public string Name { get; init; }
     public string GovernmentIdentification { get; init; }
-    public TimeSheetEntity TimeSheet { get; init; }
+    public TimeSheetEntity TimeSheet { get; private set; }
     public List<Project> AllocatedProjects { get; init; }
     
     public static Employee CreateNewEmployee(string name, string governmentIdentification)
@@ -59,5 +59,10 @@ public class Employee : BaseEntity<long>
         var project = AllocatedProjects.FirstOrDefault(x => x.Id == projectId);
 
         return project.WorkedHoursByDay;
+    }
+
+    public void SetTimeSheet(TimeSheetEntity timeSheet)
+    {
+        TimeSheet = timeSheet;
     }
 }

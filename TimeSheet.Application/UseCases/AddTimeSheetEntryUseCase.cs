@@ -7,37 +7,39 @@ using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Application.UseCases;
 
-public class CreateTimeSheetEntryUseCase : IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>>
+public class AddTimeSheetEntryUseCase : IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>>
 {
     private readonly IEmployeeFactory _employeeFactory;
     private readonly IEmployeeRepository _employeeRepository;
 
-    public CreateTimeSheetEntryUseCase(
-        IEmployeeFactory employeeFactory, 
+    public AddTimeSheetEntryUseCase(
+        IEmployeeFactory employeeFactory,
         IEmployeeRepository employeeRepository)
     {
         _employeeFactory = employeeFactory;
         _employeeRepository = employeeRepository;
     }
-    
-    public async Task<Result<CreateTimeSheetEntryOutput>> Execute(CreateTimeSheetEntryInput allocateEmployeeToProjectInput)
+
+    public async Task<Result<CreateTimeSheetEntryOutput>> Execute(
+        CreateTimeSheetEntryInput allocateEmployeeToProjectInput)
     {
-        var employee = await _employeeFactory.CreateWithTimeSheetEntries(allocateEmployeeToProjectInput.GovernmentIdentification, DateTime.Today, DateTime.Today.AddHours(23).AddMinutes(59).AddSeconds(59));
+        var employee = await _employeeFactory.CreateWithTimeSheetEntries(
+            allocateEmployeeToProjectInput.GovernmentIdentification, DateTime.Today,
+            DateTime.Today.AddHours(23).AddMinutes(59).AddSeconds(59));
 
         if (employee is null)
         {
-            return Result<CreateTimeSheetEntryOutput>
-                .Fail(
-                    default(CreateTimeSheetEntryOutput),
-                    string.Format(ErrorMessages.EmployeeNotfound, allocateEmployeeToProjectInput.GovernmentIdentification));
+            return Result.Fail(
+                default(CreateTimeSheetEntryOutput),
+                string.Format(ErrorMessages.EmployeeNotfound, allocateEmployeeToProjectInput.GovernmentIdentification));
         }
-        
+
         employee.TimeSheet.AddTimeEntry(allocateEmployeeToProjectInput.timeEntry);
 
         await _employeeRepository.Update(employee);
-        
+
         var createTimeSheetEntryOutput = EmployeeMapper.MapToCreateTimeSheetEntryOutput(employee);
-        
+
         return Result.Ok(createTimeSheetEntryOutput);
     }
 }

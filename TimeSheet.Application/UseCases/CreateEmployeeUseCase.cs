@@ -25,7 +25,7 @@ public class CreateEmployeeUseCase : IUseCase<CreateEmployeeInput, Result<Create
         if (employee.Id != default)
         {
             var employeeAlreadyExistsOutput = EmployeeMapper.MapToCreateEmployeeOutput(employee);
-            return Result.Fail(employeeAlreadyExistsOutput, string.Format(ErrorMessages.EmployeeAlreadyExists, employee.GovernmentIdentification));
+            return Result.Fail(employeeAlreadyExistsOutput, ErrorMessages.EmployeeAlreadyExists(employee.GovernmentIdentification));
         }
 
         await _employeeRepository.Create(employee);

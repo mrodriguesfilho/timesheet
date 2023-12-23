@@ -7,7 +7,6 @@ public class TimeSheetEntry : BaseEntity<long>
     public TimeSpan WorkedHours { get; private set; }
     public TimeSpan HoursAllocated { get; private set; }
     public TimeSpan HoursAvailableToAllocate => WorkedHours - HoursAllocated;
-    
     public bool IsCompleted { get; private set; }
     
     public TimeSheetEntry(DateTime startDate)
@@ -15,6 +14,15 @@ public class TimeSheetEntry : BaseEntity<long>
         StartDate = startDate;
     }
 
+    public TimeSheetEntry(DateTime startDate, DateTime? endDate, TimeSpan workedHours, TimeSpan hoursAllocated, bool isCompleted)
+    {
+        StartDate = startDate;
+        EndDate = endDate;
+        WorkedHours = workedHours;
+        HoursAllocated = hoursAllocated;
+        IsCompleted = isCompleted;
+    }
+    
     public void SetEndDate(DateTime endDate)
     {
         if (IsCompleted) return;

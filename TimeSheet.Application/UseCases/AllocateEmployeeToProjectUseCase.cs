@@ -43,7 +43,10 @@ public class AllocateEmployeeToProjectUseCase : IUseCase<AllocateEmployeeToProje
         
         var isAllocated = employee.AllocateToProject(project);
         
-        if(!isAllocated) return Result.Fail(EmployeeMapper.MapToAllocateEmployeeToProjectOutput(employee), $"Employee already allocated to project {project.Ticker}");
+        if(!isAllocated) 
+            return Result.Fail(
+                EmployeeMapper.MapToAllocateEmployeeToProjectOutput(employee), 
+                $"Employee already allocated to project {project.Ticker}");
         
         await _employeeRepository.Update(employee);
 

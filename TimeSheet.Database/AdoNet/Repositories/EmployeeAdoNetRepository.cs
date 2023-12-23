@@ -92,7 +92,7 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
         var selectEmployeeQuery = string.Format(EmployeeQueries.SELECT_EMPLOYEE_BY_GOVERNMENT_CODE, governmentIdentification);
         var selectEmployeeDatabaseResult = await _databaseAdapter.ExecuteQueryAsync(selectEmployeeQuery, dataRecord => EmployeeModelMapper.Map(dataRecord));
 
-        if (!selectEmployeeDatabaseResult.Success) return null;
+        if (!selectEmployeeDatabaseResult.Success || !selectEmployeeDatabaseResult.Value.Any()) return null;
 
         var employeeModel = selectEmployeeDatabaseResult.Value.FirstOrDefault();
         
@@ -120,12 +120,20 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
         var employeeModel = selectEmployeeDatabaseResult.Value.FirstOrDefault();
         
         var allocatedProjectsDatabaseResult =
-            await _databaseAdapter.ExecuteQueryAsync<ProjectModel>(string.Format(ProjectQueries.SELECT_ALLOCATED_PROJECTS_BY_EMPLOYEE_ID, employeeModel.Id),
+            await _databaseAdapter.ExecuteQueryAsync<ProjectModel>(
+                string.Format(
+                    ProjectQueries.SELECT_ALLOCATED_PROJECTS_BY_EMPLOYEE_ID,
+                    employeeModel.Id),
                 dataRecord => ProjectModelMapper.MapWithAllocation(dataRecord));
 
         var timeSheetEntriesDatabaseResult =
-            await _databaseAdapter.ExecuteQueryAsync<TimeSheetEntryModel>(string.Format(TimeSheetEntryQueries.SELECT_ENTRIES_BY_DATE, employeeModel.Id, startDate,
-                endDate), dataRecord => TimeSheetEntryMapper.Map(dataRecord));
+            await _databaseAdapter.ExecuteQueryAsync<TimeSheetEntryModel>(
+                string.Format(
+                    TimeSheetEntryQueries.SELECT_ENTRIES_BY_DATE, 
+                    employeeModel.Id, 
+                    startDate.ToDateTimeStyle(),
+                    endDate.ToDateTimeStyle()), 
+                dataRecord => TimeSheetEntryMapper.Map(dataRecord));
         
         var employeeBuilder = new EmployeeBuilder();
 
@@ -155,8 +163,8 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
             insertNewTimeSheetEntrySb.AppendFormat(
                 TimeSheetEntryQueries.INSERT_TIME_ENTRY_VALUE,
                 employee.Id,
-                timeSheetEntriesNotAdded[index].StartDate.ToStringSingleQuoted(),
-                timeSheetEntriesNotAdded[index].EndDate.ToStringSingleQuoted(),
+                timeSheetEntriesNotAdded[index].StartDate.ToDateTimeStyle(),
+                timeSheetEntriesNotAdded[index].EndDate.ToDateTimeStyle(),
                 timeSheetEntriesNotAdded[index].WorkedHours.ToStringSingleQuoted(),
                 timeSheetEntriesNotAdded[index].HoursAllocated.ToStringSingleQuoted(),
                 timeSheetEntriesNotAdded[index].IsCompleted
