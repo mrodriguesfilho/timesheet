@@ -7,7 +7,7 @@ using TimeSheet.Test.Integration.Fixtures;
 namespace TimeSheet.Test.Integration;
 
 [Collection(nameof(CreateEmployeeUseCaseTestFixture))]
-public class CreateEmployeeUseCaseTest : BaseFixture
+public class CreateEmployeeUseCaseTest : CreateEmployeeUseCaseTestFixture
 {
     private readonly CreateEmployeeUseCaseTestFixture _fixture;
     

@@ -33,20 +33,18 @@ public class AllocateEmployeeToProjectUseCase : IUseCase<AllocateEmployeeToProje
         if (project is null)
             return Result.Fail(
                 default(AllocateEmployeeToProjectOutput),
-                string.Format(ErrorMessages.ProjectNotFound,
-                    allocateEmployeeToProjectInput.ProjectTicker));
+                ErrorMessages.ProjectNotFound(allocateEmployeeToProjectInput.ProjectTicker));
         
         if (employee is null)
             return Result.Fail(default(AllocateEmployeeToProjectOutput),
-                string.Format(ErrorMessages.EmployeeNotfound,
-                    allocateEmployeeToProjectInput.EmployeeGovernmentIdentification));
+                ErrorMessages.EmployeeNotFound(allocateEmployeeToProjectInput.EmployeeGovernmentIdentification));
         
         var isAllocated = employee.AllocateToProject(project);
         
         if(!isAllocated) 
             return Result.Fail(
                 EmployeeMapper.MapToAllocateEmployeeToProjectOutput(employee), 
-                $"Employee already allocated to project {project.Ticker}");
+                ErrorMessages.EmployeeAlreadyAllocatedToProject(project.Ticker));
         
         await _employeeRepository.Update(employee);
 

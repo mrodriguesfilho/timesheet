@@ -31,7 +31,7 @@ public class AddTimeSheetEntryUseCase : IUseCase<CreateTimeSheetEntryInput, Resu
         {
             return Result.Fail(
                 default(CreateTimeSheetEntryOutput),
-                string.Format(ErrorMessages.EmployeeNotfound, allocateEmployeeToProjectInput.GovernmentIdentification));
+                ErrorMessages.EmployeeNotFound(allocateEmployeeToProjectInput.GovernmentIdentification));
         }
 
         employee.TimeSheet.AddTimeEntry(allocateEmployeeToProjectInput.timeEntry);

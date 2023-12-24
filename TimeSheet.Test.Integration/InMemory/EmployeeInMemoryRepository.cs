@@ -7,7 +7,7 @@ public class EmployeeInMemoryRepository : IEmployeeRepository
 {
     private long SequenceId = 0;
     
-    private static readonly List<Employee> _employees = new();
+    private readonly List<Employee> _employees = new();
 
     private long GetNewId()
     {

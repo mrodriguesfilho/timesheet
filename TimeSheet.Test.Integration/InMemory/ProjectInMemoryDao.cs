@@ -5,7 +5,7 @@ namespace TimeSheet.Test.Integration.InMemory;
 
 public class ProjectInMemoryDao : IProjectDao
 {
-    private static List<Project> _projects = new();
+    private List<Project> _projects = new();
     private long _sequenceId = 0;
 
     private long GetNewId()

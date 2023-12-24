@@ -8,7 +8,7 @@ namespace TimeSheet.Test.Integration;
 
 [Collection(nameof(CreateProjectUseCaseTestFixture))]
 
-public class CreateProjectUseCaseTest
+public class CreateProjectUseCaseTest : CreateProjectUseCaseTestFixture
 {
     private readonly CreateProjectUseCaseTestFixture _fixture;
     
@@ -23,13 +23,13 @@ public class CreateProjectUseCaseTest
         var projectDao = _fixture.CreateProjectDao();
         var projectFactory = new ProjectFactory(projectDao);
         var createProjectUseCase = new CreateProjectUseCase(projectDao, projectFactory);
-        var createProjectInput = new CreateProjectInput("McDonalds Project 1", "MCD1");
+        var createProjectInput = new CreateProjectInput("Burguer King's Project", "BKPJ");
         var result = await createProjectUseCase.Execute(createProjectInput);
         
         Assert.True(result.Success);
         Assert.NotEqual(0, result.Value.Id);
-        Assert.Equal("McDonalds Project 1", result.Value.Name);
-        Assert.Equal("MCD1", result.Value.Ticker);
+        Assert.Equal("Burguer King's Project", result.Value.Name);
+        Assert.Equal("BKPJ", result.Value.Ticker);
     }
     
     [Fact]
@@ -41,7 +41,7 @@ public class CreateProjectUseCaseTest
         var createProjectInput = _fixture.GetValidProjectInput();
         var successfulResult = await createProjectUseCase.Execute(createProjectInput);
         var unsuccessffulResult  = await createProjectUseCase.Execute(createProjectInput);
-        
+        if(!unsuccessffulResult.Success) Console.WriteLine();
         Assert.True(successfulResult.Success);
         Assert.False(unsuccessffulResult.Success);
         Assert.Equal(ErrorMessages.ProjectAlreadyExists(createProjectInput.Ticker), unsuccessffulResult.Error);

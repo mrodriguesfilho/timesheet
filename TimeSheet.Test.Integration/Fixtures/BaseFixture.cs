@@ -5,9 +5,6 @@ namespace TimeSheet.Test.Integration.Fixtures;
 
 public class BaseFixture
 {
-    private readonly EmployeeInMemoryRepository _employeeInMemoryRepository;
-    private readonly ProjectInMemoryDao _projectInMemoryDao;
-   
     private const string GovernmentIdentification = "111-111-111-22";
     private const string EmployeeName = "João Pedro";
 
@@ -16,13 +13,11 @@ public class BaseFixture
     
     protected BaseFixture()
     {
-        _employeeInMemoryRepository = new();
-        _projectInMemoryDao = new();
     }
 
-    public EmployeeInMemoryRepository CreateEmployeeRepository() => _employeeInMemoryRepository;
+    public EmployeeInMemoryRepository CreateEmployeeRepository() => new EmployeeInMemoryRepository();
 
-    public ProjectInMemoryDao CreateProjectDao() => _projectInMemoryDao;
+    public ProjectInMemoryDao CreateProjectDao() => new ProjectInMemoryDao();
     
     public CreateEmployeeInput GetValidEmployeeInput()
     {
