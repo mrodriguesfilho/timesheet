@@ -31,6 +31,6 @@ public static class ErrorMessages
 
     public static string EmployeeAlreadyAllocatedToProject(string ticker)
     {
-        return string.Format(_employeeAlreadyAllocatedToProjectMsg, ticker);
+        return string.Format(_employeeAlreadyAllocatedToProjectMsg, ticker);    
     }
 }

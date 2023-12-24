@@ -4,7 +4,7 @@ using TimeSheet.Application.StaticData;
 using TimeSheet.Application.UseCases;
 using TimeSheet.Test.Integration.Fixtures;
 
-namespace TimeSheet.Test.Integration;
+namespace TimeSheet.Test.Integration.Tests;
 
 [Collection(nameof(CreateEmployeeUseCaseTestFixture))]
 public class CreateEmployeeUseCaseTest : CreateEmployeeUseCaseTestFixture

@@ -47,28 +47,6 @@ public class EmployeeInMemoryRepository : IEmployeeRepository
     public Task<Employee?> GetByGovernmentIdWithTimeSheetEntries(string governmentIdentification, DateTime startDate, DateTime endDate)
     {
         var employeeFound = _employees.FirstOrDefault(x => x.GovernmentIdentification == governmentIdentification);
-
-        if (employeeFound is null) return Task.FromResult(employeeFound);
-
-        var timeSheetEntries = employeeFound.TimeSheet?.GetAllTimeSheetEntries();
-
-        var filteredTimeSheetEntries = timeSheetEntries
-            .Where(x => x.StartDate >= startDate && x.EndDate <= endDate);
-
-        var timeSheet = new Dictionary<DateTime, List<TimeSheetEntry>>();
-        foreach (var filteredTimeSheetEntry in filteredTimeSheetEntries)
-        {
-            if (timeSheet.TryGetValue(filteredTimeSheetEntry.StartDate, out var dayTimeSheetEntries))
-            {
-                dayTimeSheetEntries.Add(filteredTimeSheetEntry);
-                continue;
-            }
-            
-            timeSheet.Add(filteredTimeSheetEntry.StartDate.Date, new List<TimeSheetEntry>(){ filteredTimeSheetEntry });
-        }
-
-        var timeSheetEntity = new TimeSheetEntity(timeSheet);
-        employeeFound.SetTimeSheet(timeSheetEntity);
         return Task.FromResult(employeeFound)!;
     }
 }
