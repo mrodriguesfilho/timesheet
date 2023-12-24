@@ -16,7 +16,7 @@ public class ProjectAdoNetDao : IProjectDao
         _databaseAdapter = databaseAdapter;
     }
     
-    public async Task<int> Create(Project project)
+    public async Task<long> Create(Project project)
     {
         var databaseResult = await _databaseAdapter.ExecuteNonQueryAsync(string.Format(ProjectQueries.INSERT_PROJECT, project.Name, project.Ticker));
 

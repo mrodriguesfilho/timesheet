@@ -38,7 +38,7 @@ public class CreateEmployeeUseCaseTest : BaseFixture
         var employeeFactory = new EmployeeFactory(employeeRepository);
         var createEmployeeUseCase = new CreateEmployeeUseCase(employeeRepository, employeeFactory);
 
-        var createEmployeeInput = CreateEmployeeUseCaseTestFixture.GetValidInput();
+        var createEmployeeInput = _fixture.GetValidEmployeeInput();
         var sucessfulResult = await createEmployeeUseCase.Execute(createEmployeeInput);
         var unsucessfulResult = await createEmployeeUseCase.Execute(createEmployeeInput);
         

@@ -23,14 +23,15 @@ public class CreateProjectUseCase : IUseCase<CreateProjectInput, Result<CreatePr
         var project = await _projectFactory.Create(allocateEmployeeToProjectInput.Ticker, allocateEmployeeToProjectInput.Name);
 
         if (project is null)
-            return Result<CreateProjectOutput>
+            return Result
                 .Fail(default(CreateProjectOutput),
                     string.Format(ErrorMessages.UnableToCreateProject, allocateEmployeeToProjectInput.Name,
                         allocateEmployeeToProjectInput.Ticker));
         
-        if (project.Id != default) return Result<CreateProjectOutput>.Fail(
-            ProjectMapper.MapToCreateProjectOutput(project),
-            string.Format(ErrorMessages.ProjectAlreadyExists, allocateEmployeeToProjectInput.Ticker));
+        if (project.Id != default) 
+            return Result
+                .Fail(ProjectMapper.MapToCreateProjectOutput(project), 
+                    ErrorMessages.ProjectAlreadyExists(allocateEmployeeToProjectInput.Ticker));
 
         await _projectDao.Create(project);
 
