@@ -104,6 +104,57 @@ public class AddTimeSheetEntryUseCaseTest
         Assert.Equal(TimeSpan.FromHours(4), lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[0].WorkedHours);
     }
     
+        [Fact]
+    public async void It_should_add_entries_for_a_complete_day_of_work()
+    {
+        var employeeRepository = _fixture.CreateEmployeeRepository();
+        var employeeFactory = new EmployeeFactory(employeeRepository);
+        var createEmployeeUseCase = new CreateEmployeeUseCase(employeeRepository, employeeFactory);
+        var employee = _fixture.GetValidEmployeeInput();
+        var createEmployeeResult = await createEmployeeUseCase.Execute(employee);
+        var addTimeSheetEntryUseCase = new AddTimeSheetEntryUseCase(employeeFactory, employeeRepository);
+        var arriveTime = new DateTime(2023, 12, 26, 08, 01, 23); 
+        var arriveTimeSheetEntryInput =
+            new CreateTimeSheetEntryInput(createEmployeeResult.Value.GovernmentIdentification,
+                arriveTime);
+        var arriveTimeSheetEntryResult = await addTimeSheetEntryUseCase.Execute(arriveTimeSheetEntryInput);
+        var lunchLeaveTime = new DateTime(2023, 12, 26, 12, 01, 23); 
+        var lunchTimeSheetEntryInput =
+            new CreateTimeSheetEntryInput(createEmployeeResult.Value.GovernmentIdentification,
+                lunchLeaveTime);
+        var lunchTimeSheetEntryResult = await addTimeSheetEntryUseCase.Execute(lunchTimeSheetEntryInput);
+        var lunchReturnTime = new DateTime(2023, 12, 26, 13, 01, 23); 
+        var lunchReturnTimeSheetEntryInput =
+            new CreateTimeSheetEntryInput(createEmployeeResult.Value.GovernmentIdentification,
+                lunchReturnTime);
+        var lunchReturnTimeSheetEntryResult = await addTimeSheetEntryUseCase.Execute(lunchReturnTimeSheetEntryInput);
+        var officeLeaveTime = new DateTime(2023, 12, 26, 17, 01, 23); 
+        var officeLeaveTimeSheetEntryInput =
+            new CreateTimeSheetEntryInput(createEmployeeResult.Value.GovernmentIdentification,
+                officeLeaveTime);
+        var officeLeaveTimeSheetEntryResult = await addTimeSheetEntryUseCase.Execute(officeLeaveTimeSheetEntryInput);
+        
+        Assert.True(createEmployeeResult.Success);
+        Assert.True(arriveTimeSheetEntryResult.Success);
+        Assert.True(lunchTimeSheetEntryResult.Success);
+        Assert.True(lunchReturnTimeSheetEntryResult.Success);
+        Assert.True(officeLeaveTimeSheetEntryResult.Success);
+        Assert.Equal(2, lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries().Count);
+        Assert.True(lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[0].IsCompleted);
+        Assert.True(lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[1].IsCompleted);
+        Assert.Equal(arriveTime, lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[0].StartDate);
+        Assert.Equal(lunchReturnTime, lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[1].StartDate);
+        Assert.Equal(lunchLeaveTime, lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[0].EndDate);
+        Assert.Equal(officeLeaveTime, lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[1].EndDate);
+        Assert.Equal(TimeSpan.FromHours(4), lunchTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[0].WorkedHours);
+        Assert.Equal(TimeSpan.FromHours(4), officeLeaveTimeSheetEntryResult.Value.TimeSheet.GetAllTimeSheetEntries()[1].WorkedHours);
+        var workedTimeDictionary = officeLeaveTimeSheetEntryResult.Value.TimeSheet.CalculateWorkedTime();
+        var workDayFound = workedTimeDictionary.TryGetValue(officeLeaveTime.Date, out var workedDay);
+        Assert.True(workDayFound);
+        Assert.Equal(8, workedDay.Hours);
+    }
+    
+    
     [Fact]
     public async void It_shouldnt_add_a_time_sheet_entry_to_an_non_existant_employee()
     {

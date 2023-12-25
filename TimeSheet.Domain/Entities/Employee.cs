@@ -43,11 +43,11 @@ public class Employee : BaseEntity<long>
         return true;
     }
     
-    public void AllocateHoursToProject(long projectId, DateTime dayOfWork, TimeSpan hoursToAllocate)
+    public void AllocateHoursToProject(string projectTicker, DateTime dayOfWork, TimeSpan hoursToAllocate)
     {
         var timeSheetEntriesOfTheDay = TimeSheet.GetTimeSheetEntriesByDayOfWork(dayOfWork);
 
-        var projectIndex = AllocatedProjects.FindIndex(x => x.Id == projectId);
+        var projectIndex = AllocatedProjects.FindIndex(x => x.Ticker == projectTicker);
 
         if (projectIndex < 0) return;
 

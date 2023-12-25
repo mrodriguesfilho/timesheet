@@ -28,7 +28,7 @@ public class AllocateHoursToProjectTest
         var project = new Project("McDonalds Project", "MCP", new Dictionary<DateTime, TimeSpan>());
         project.SetId(1);
         employee.AllocateToProject(project);
-        employee.AllocateHoursToProject(project.Id, dayOfWork, TimeSpan.FromHours(8));
+        employee.AllocateHoursToProject(project.Ticker, dayOfWork, TimeSpan.FromHours(8));
         var allocatedProjects = employee.AllocatedProjects;
         var allocatedHoursByDay = employee.GetHoursAllocatedByProjectId(1);
         
@@ -55,12 +55,12 @@ public class AllocateHoursToProjectTest
         var mcDonaldsProject = new Project("McDonalds Project", "MCP",new Dictionary<DateTime, TimeSpan>());
         mcDonaldsProject.SetId(1);
         employee.AllocateToProject(mcDonaldsProject);
-        employee.AllocateHoursToProject(mcDonaldsProject.Id, dayOfWork, TimeSpan.FromHours(4));
+        employee.AllocateHoursToProject(mcDonaldsProject.Ticker, dayOfWork, TimeSpan.FromHours(4));
         
         var burguerKingProject = new Project("Burguer King Project", "BKPJ", new Dictionary<DateTime, TimeSpan>());
         burguerKingProject.SetId(2);
         employee.AllocateToProject(burguerKingProject);
-        employee.AllocateHoursToProject(burguerKingProject.Id, dayOfWork, TimeSpan.FromHours(4));
+        employee.AllocateHoursToProject(burguerKingProject.Ticker, dayOfWork, TimeSpan.FromHours(4));
         
         var mcDonaldsAllocatedHours = employee.GetHoursAllocatedByProjectId(1);
         var burguerKingAllocatedHours = employee.GetHoursAllocatedByProjectId(2);
@@ -88,12 +88,12 @@ public class AllocateHoursToProjectTest
         var mcDonaldsProject = new Project("McDonalds Project", "MCP",new Dictionary<DateTime, TimeSpan>());
         mcDonaldsProject.SetId(1);
         employee.AllocateToProject(mcDonaldsProject);
-        employee.AllocateHoursToProject(mcDonaldsProject.Id, dayOfWork, TimeSpan.FromHours(8));
+        employee.AllocateHoursToProject(mcDonaldsProject.Ticker, dayOfWork, TimeSpan.FromHours(8));
         
         var burguerKingProject = new Project("Burguer King Project", "BKPJ",new Dictionary<DateTime, TimeSpan>());
         burguerKingProject.SetId(2);
         employee.AllocateToProject(burguerKingProject);
-        employee.AllocateHoursToProject(burguerKingProject.Id, dayOfWork, TimeSpan.FromHours(8));
+        employee.AllocateHoursToProject(burguerKingProject.Ticker, dayOfWork, TimeSpan.FromHours(8));
         
         var mcDonaldsAllocatedHours = employee.GetHoursAllocatedByProjectId(1);
         var burguerKingAllocatedHours = employee.GetHoursAllocatedByProjectId(2);

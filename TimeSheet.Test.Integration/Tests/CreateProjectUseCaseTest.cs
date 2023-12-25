@@ -33,7 +33,7 @@ public class CreateProjectUseCaseTest : CreateProjectUseCaseTestFixture
     }
     
     [Fact]
-    public async void It_shoulnd_create_a_project_twice()
+    public async void It_shouldnt_create_a_project_twice()
     {
         var projectDao = _fixture.CreateProjectDao();
         var projectFactory = new ProjectFactory(projectDao);
@@ -41,7 +41,7 @@ public class CreateProjectUseCaseTest : CreateProjectUseCaseTestFixture
         var createProjectInput = _fixture.GetValidProjectInput();
         var successfulResult = await createProjectUseCase.Execute(createProjectInput);
         var unsuccessffulResult  = await createProjectUseCase.Execute(createProjectInput);
-        if(!unsuccessffulResult.Success) Console.WriteLine();
+        
         Assert.True(successfulResult.Success);
         Assert.False(unsuccessffulResult.Success);
         Assert.Equal(ErrorMessages.ProjectAlreadyExists(createProjectInput.Ticker), unsuccessffulResult.Error);

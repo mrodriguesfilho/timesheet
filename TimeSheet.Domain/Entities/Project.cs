@@ -6,7 +6,7 @@ public class Project : BaseEntity<long>
     public string Ticker { get; private set; }
     public DateTime AllocationDate { get; private set; }
     public DateTime? DeallocationDate { get; private set; }
-    public Dictionary<DateTime, TimeSpan> WorkedHoursByDay { get; init; }
+    public Dictionary<DateTime, TimeSpan> WorkedHoursByDay { get; private set; }
 
     private Project(){}
     
@@ -15,6 +15,7 @@ public class Project : BaseEntity<long>
         var newProject = new Project();
         newProject.Name = name;
         newProject.Ticker = ticker;
+        newProject.WorkedHoursByDay = new Dictionary<DateTime, TimeSpan>();
         return newProject;
     }
 

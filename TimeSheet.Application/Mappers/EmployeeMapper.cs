@@ -28,7 +28,15 @@ public static class EmployeeMapper
         return new AllocateEmployeeToProjectOutput(
             employee.GovernmentIdentification,
             employee.Name,
-            employee.AllocatedProjects.ConvertAll(x => ProjectMapper.MapToCreateProjectOutput(x))
+            employee.AllocatedProjects.ConvertAll(ProjectMapper.MapToCreateProjectOutput)
         );
+    }
+
+    public static AllocateHoursToProjectOutput MapToAllocateHoursToProjectOutput(Employee employee)
+    {
+        return new AllocateHoursToProjectOutput(
+            employee.GovernmentIdentification,
+            employee.Name
+            );
     }
 }
