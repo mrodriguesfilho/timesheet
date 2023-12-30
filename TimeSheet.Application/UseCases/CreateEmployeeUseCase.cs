@@ -1,7 +1,7 @@
 using TimeSheet.Application.DTO;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Application.Mappers;
-using TimeSheet.Application.StaticData;
+using TimeSheet.Application.StaticMessages;
 using TimeSheet.Domain.Factories;
 using TimeSheet.Domain.Interfaces;
 

@@ -8,8 +8,8 @@ namespace TimeSheet.API.Controllers;
 [Route("[controller]")]
 public class CreateProjectController : ControllerBase
 {
-    public IUseCase<CreateProjectInput, Result<CreateProjectOutput>> _createProjectUseCase;
-    
+    private readonly IUseCase<CreateProjectInput, Result<CreateProjectOutput>> _createProjectUseCase;
+
     public CreateProjectController(IUseCase<CreateProjectInput, Result<CreateProjectOutput>> createProjectUseCase)
     {
         _createProjectUseCase = createProjectUseCase;

@@ -8,7 +8,7 @@ namespace TimeSheet.API.Controllers;
 [Route("[controller]")]
 public class AllocateEmployeeToProjectController : ControllerBase
 {
-    public IUseCase<AllocateEmployeeToProjectInput, Result<AllocateEmployeeToProjectOutput>>
+    private readonly IUseCase<AllocateEmployeeToProjectInput, Result<AllocateEmployeeToProjectOutput>>
         _allocateEmployeeToProjectUseCase;
 
     public AllocateEmployeeToProjectController(IUseCase<AllocateEmployeeToProjectInput, Result<AllocateEmployeeToProjectOutput>> allocateEmployeeToProjectUseCase)

@@ -8,13 +8,13 @@ namespace TimeSheet.API.Controllers;
 [Route("[controller]")]
 public class CreateEmployeeController : ControllerBase
 {
-    private IUseCase<CreateEmployeeInput, Result<CreateEmployeeOutput>> _createEmployeeUseCase;
+    private readonly IUseCase<CreateEmployeeInput, Result<CreateEmployeeOutput>> _createEmployeeUseCase;
 
     public CreateEmployeeController(IUseCase<CreateEmployeeInput, Result<CreateEmployeeOutput>> createEmployeeUseCase)
     {
         _createEmployeeUseCase = createEmployeeUseCase;
     }
-    
+
     public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeInput createEmployeeInput)
     {
         var response = await _createEmployeeUseCase.Execute(createEmployeeInput);

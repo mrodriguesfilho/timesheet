@@ -1,7 +1,7 @@
 using TimeSheet.Application.DTO;
 using TimeSheet.Application.Interfaces;
 using TimeSheet.Application.Mappers;
-using TimeSheet.Application.StaticData;
+using TimeSheet.Application.StaticMessages;
 using TimeSheet.Domain.Factories;
 using TimeSheet.Domain.Interfaces;
 
@@ -35,7 +35,7 @@ public class AllocateHoursToProjectUseCase : IUseCase<AllocateHoursToProjectInpu
             allocateEmployeeToProjectInput.Date,
             allocateEmployeeToProjectInput.HoursToAllocates);
 
-        await _employeeRepository.Update(employee);
+        await _employeeRepository.UpdateProjectAllocatedHours(employee, allocateEmployeeToProjectInput.Ticker, allocateEmployeeToProjectInput.Date);
 
         var allocateHoursToProjectOutput = EmployeeMapper.MapToAllocateHoursToProjectOutput(employee);
         return Result.Ok(allocateHoursToProjectOutput);

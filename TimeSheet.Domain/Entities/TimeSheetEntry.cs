@@ -1,3 +1,5 @@
+using TimeSheet.Domain.Enums;
+
 namespace TimeSheet.Domain.Entities;
 
 public class TimeSheetEntry : BaseEntity<long>
@@ -6,6 +8,7 @@ public class TimeSheetEntry : BaseEntity<long>
     public DateTime? EndDate { get; private set; }
     public TimeSpan WorkedHours { get; private set; }
     public TimeSpan HoursAllocated { get; private set; }
+    public DateTime? LastHoursAlloactionDate { get; private set; }
     public TimeSpan HoursAvailableToAllocate => WorkedHours - HoursAllocated;
     public bool IsCompleted { get; private set; }
     
@@ -42,5 +45,7 @@ public class TimeSheetEntry : BaseEntity<long>
     public void AllocateHours(TimeSpan hoursAvailableToAllocate)
     {
         HoursAllocated += hoursAvailableToAllocate;
+        EntityStatus = EntityStatus.PendingCommit;
+        LastHoursAlloactionDate = DateTime.Now;
     }
 }

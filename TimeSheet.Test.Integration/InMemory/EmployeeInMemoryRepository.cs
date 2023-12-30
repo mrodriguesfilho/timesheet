@@ -1,17 +1,18 @@
 using TimeSheet.Domain.Entities;
+using TimeSheet.Domain.Enums;
 using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Test.Integration.InMemory;
 
 public class EmployeeInMemoryRepository : IEmployeeRepository
 {
-    private long SequenceId = 0;
+    private long _sequenceId;
     
     private readonly List<Employee> _employees = new();
 
     private long GetNewId()
     {
-        var newId = ++SequenceId;
+        var newId = ++_sequenceId;
         return newId;
     }
     
@@ -38,6 +39,20 @@ public class EmployeeInMemoryRepository : IEmployeeRepository
         return Task.CompletedTask;
     }
 
+    public Task UpdateProjectAllocatedHours(Employee employee, string projectTicker, DateTime dateTime)
+    {
+        var project = employee.AllocatedProjects.SingleOrDefault(x => x.Ticker == projectTicker);
+
+        if (project is null) return Task.CompletedTask;
+
+        var updatedAllocatedHoursList = employee.TimeSheet
+            .GetAllTimeSheetEntries()
+            .Where(x => x.EntityStatus == EntityStatus.PendingCommit)
+            .ToList();
+        
+        return Task.CompletedTask;
+    }
+    
     public Task<Employee?> GetByGovernmentId(string governmentIdentification)
     {
         var employeeFound = _employees.FirstOrDefault(x => x.GovernmentIdentification == governmentIdentification);

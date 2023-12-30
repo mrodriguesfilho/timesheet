@@ -54,11 +54,10 @@ public class Employee : BaseEntity<long>
         AllocatedProjects[projectIndex].AllocateHours(dayOfWork, hoursToAllocate, timeSheetEntriesOfTheDay);
     }
 
-    public Dictionary<DateTime, TimeSpan> GetHoursAllocatedByProjectId(long projectId)
+    public Dictionary<DateTime, TimeSpan> GetHoursAllocatedByProjectTicker(string projectTicker)
     {
-        var project = AllocatedProjects.FirstOrDefault(x => x.Id == projectId);
-
-        return project.WorkedHoursByDay;
+        var project = AllocatedProjects.FirstOrDefault(x => x.Ticker == projectTicker);
+        return project?.WorkedHoursByDay;
     }
 
     public void SetTimeSheet(TimeSheetEntity timeSheet)

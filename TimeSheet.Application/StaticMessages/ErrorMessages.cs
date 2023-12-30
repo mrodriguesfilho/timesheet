@@ -1,4 +1,4 @@
-namespace TimeSheet.Application.StaticData;
+namespace TimeSheet.Application.StaticMessages;
 
 public static class ErrorMessages
 {

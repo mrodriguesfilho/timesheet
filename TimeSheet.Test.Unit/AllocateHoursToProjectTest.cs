@@ -11,7 +11,6 @@ public class AllocateHoursToProjectTest
         var employee = new Employee(1, "João Pedro", "111-222-333-00", new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()), new List<Project>());
         var project = Project.CreateExistingProject(1, "McDonald's", "MCP");
         employee.AllocateToProject(project);
-        
     }
     
     [Fact]
@@ -30,7 +29,7 @@ public class AllocateHoursToProjectTest
         employee.AllocateToProject(project);
         employee.AllocateHoursToProject(project.Ticker, dayOfWork, TimeSpan.FromHours(8));
         var allocatedProjects = employee.AllocatedProjects;
-        var allocatedHoursByDay = employee.GetHoursAllocatedByProjectId(1);
+        var allocatedHoursByDay = employee.GetHoursAllocatedByProjectTicker(project.Ticker);
         
         Assert.Single(workedTimeByDay);
         Assert.Single(allocatedProjects);
@@ -62,8 +61,8 @@ public class AllocateHoursToProjectTest
         employee.AllocateToProject(burguerKingProject);
         employee.AllocateHoursToProject(burguerKingProject.Ticker, dayOfWork, TimeSpan.FromHours(4));
         
-        var mcDonaldsAllocatedHours = employee.GetHoursAllocatedByProjectId(1);
-        var burguerKingAllocatedHours = employee.GetHoursAllocatedByProjectId(2);
+        var mcDonaldsAllocatedHours = employee.GetHoursAllocatedByProjectTicker(mcDonaldsProject.Ticker);
+        var burguerKingAllocatedHours = employee.GetHoursAllocatedByProjectTicker(burguerKingProject.Ticker);
         
         Assert.Single(workedTimeByDay);
         Assert.True(workedTimeByDay.TryGetValue(dayOfWork, out var timeWorked));
@@ -95,8 +94,8 @@ public class AllocateHoursToProjectTest
         employee.AllocateToProject(burguerKingProject);
         employee.AllocateHoursToProject(burguerKingProject.Ticker, dayOfWork, TimeSpan.FromHours(8));
         
-        var mcDonaldsAllocatedHours = employee.GetHoursAllocatedByProjectId(1);
-        var burguerKingAllocatedHours = employee.GetHoursAllocatedByProjectId(2);
+        var mcDonaldsAllocatedHours = employee.GetHoursAllocatedByProjectTicker(mcDonaldsProject.Ticker);
+        var burguerKingAllocatedHours = employee.GetHoursAllocatedByProjectTicker(burguerKingProject.Ticker);
         
         Assert.Single(workedTimeByDay);
         Assert.True(workedTimeByDay.TryGetValue(dayOfWork, out var timeWorked));

@@ -1,6 +1,6 @@
 using TimeSheet.Application.DTO;
 using TimeSheet.Application.Factories;
-using TimeSheet.Application.StaticData;
+using TimeSheet.Application.StaticMessages;
 using TimeSheet.Application.UseCases;
 using TimeSheet.Test.Integration.Fixtures;
 

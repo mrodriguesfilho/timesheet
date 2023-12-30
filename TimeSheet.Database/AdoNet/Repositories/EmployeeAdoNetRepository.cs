@@ -7,6 +7,7 @@ using TimeSheet.Database.Extensions;
 using TimeSheet.Database.ModelMappers;
 using TimeSheet.Database.Models;
 using TimeSheet.Domain.Entities;
+using TimeSheet.Domain.Enums;
 using TimeSheet.Domain.Interfaces;
 
 namespace TimeSheet.Database.AdoNet.Repositories;
@@ -36,19 +37,43 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
         await AddNewTimeSheetEntries(employee);
         await UpdateEmployeeProjects(employee);
     }
+    
+    public async Task UpdateProjectAllocatedHours(Employee employee, string projectTicker, DateTime dateTime)
+    {
+        var dataBaseResult = await _databaseAdapter.ExecuteQueryAsync(
+                ProjectsAllocatedHoursQueries.SELECT_ALLOCATED_HOURS_BY_ID_EMPLOYEE_PROJECT_TICKER_AND_DAY_OF_WORK(
+                    employee.Id,
+                    projectTicker,
+                    dateTime),
+                EmployeeProjectMapper.Map
+            );
+
+        if (!dataBaseResult.Success) return;
+        
+        var dayOfWork = employee.GetHoursAllocatedByProjectTicker(projectTicker)
+            .FirstOrDefault(x => x.Key == dateTime);
+
+        if (dataBaseResult.Value.Any())
+        {
+            
+            return;
+        }
+        
+        await _databaseAdapter.ExecuteNonQueryAsync("");
+    }
 
     private async Task UpdateEmployeeProjects(Employee employee)
     {
         var stringBuilder = new StringBuilder();
         var dataBaseResult = await _databaseAdapter.ExecuteQueryAsync<EmployeeProjectModel>(
             string.Format(EmployeeProjectsQueries.SELECT_EMPLOYEE_ALLOCATED_PROJECTS_BY_ID_EMPLOYEE, employee.Id), 
-            dataRecord => EmployeeProjectMapper.Map(dataRecord));
+            EmployeeProjectMapper.Map);
 
         if (!dataBaseResult.Success) return;
 
         var currentProjectsList = dataBaseResult.Value;
         
-        var projectsUpdated = employee.AllocatedProjects.ConvertAll(x => ProjectModelMapper.Map(x));
+        var projectsUpdated = employee.AllocatedProjects.ConvertAll(ProjectModelMapper.Map);
 
         var removedProjectIds = new List<long>();
         foreach (var currentProject in currentProjectsList)

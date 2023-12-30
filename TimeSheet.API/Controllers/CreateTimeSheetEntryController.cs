@@ -9,9 +9,11 @@ namespace TimeSheet.API.Controllers;
 [Route("[controller]")]
 public class CreateTimeSheetEntryController : ControllerBase
 {
-    public readonly IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>> _createTimeSheetEntryUseCase;
+    private readonly IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>>
+        _createTimeSheetEntryUseCase;
 
-    public CreateTimeSheetEntryController(IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>> createTimeSheetEntryUseCase)
+    public CreateTimeSheetEntryController(
+        IUseCase<CreateTimeSheetEntryInput, Result<CreateTimeSheetEntryOutput>> createTimeSheetEntryUseCase)
     {
         _createTimeSheetEntryUseCase = createTimeSheetEntryUseCase;
     }
