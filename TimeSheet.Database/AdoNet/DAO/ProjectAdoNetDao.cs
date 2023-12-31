@@ -9,7 +9,7 @@ namespace TimeSheet.Database.AdoNet.DAO;
 
 public class ProjectAdoNetDao : IProjectDao
 {
-    public IDatabaseAdapter _databaseAdapter;
+    private readonly IDatabaseAdapter _databaseAdapter;
 
     public ProjectAdoNetDao(IDatabaseAdapter databaseAdapter)
     {

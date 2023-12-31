@@ -19,7 +19,7 @@ public class DatabaseResult
         return new DatabaseResult(false, message, exception);
     }
 
-    public static DatabaseResult<T> Fail<T>(T value, string message, Exception? exception)
+    public static DatabaseResult<T> Fail<T>(T? value, string message, Exception? exception)
     {
         return new DatabaseResult<T>(value, false, message, exception);
     }
@@ -37,9 +37,9 @@ public class DatabaseResult
 
 public class DatabaseResult<T> : DatabaseResult
 {
-    public T Value { get; set; }
+    public T? Value { get; }
 
-    protected internal DatabaseResult(T value, bool success, string error, Exception? exception = null) : base(success, error, exception)
+    protected internal DatabaseResult(T? value, bool success, string error, Exception? exception = null) : base(success, error, exception)
     {
         Value = value;
     }

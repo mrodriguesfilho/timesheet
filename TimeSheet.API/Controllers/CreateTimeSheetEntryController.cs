@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TimeSheet.Application.DTO;
 using TimeSheet.Application.Interfaces;
-using TimeSheet.Application.UseCases;
 
 namespace TimeSheet.API.Controllers;
 

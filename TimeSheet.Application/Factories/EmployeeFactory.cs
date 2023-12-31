@@ -6,7 +6,7 @@ namespace TimeSheet.Application.Factories;
 
 public class EmployeeFactory : IEmployeeFactory
 {
-    private IEmployeeRepository _employeeRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
     public EmployeeFactory(IEmployeeRepository employeeRepository)
     {

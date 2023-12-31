@@ -62,6 +62,6 @@ public class EmployeeInMemoryRepository : IEmployeeRepository
     public Task<Employee?> GetByGovernmentIdWithTimeSheetEntries(string governmentIdentification, DateTime startDate, DateTime endDate)
     {
         var employeeFound = _employees.FirstOrDefault(x => x.GovernmentIdentification == governmentIdentification);
-        return Task.FromResult(employeeFound)!;
+        return Task.FromResult(employeeFound);
     }
 }

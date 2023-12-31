@@ -2,10 +2,10 @@ namespace TimeSheet.Domain.Entities;
 
 public class Employee : BaseEntity<long>
 {
-    public string Name { get; init; }
-    public string GovernmentIdentification { get; init; }
+    public string Name { get; }
+    public string GovernmentIdentification { get; }
     public TimeSheetEntity TimeSheet { get; private set; }
-    public List<Project> AllocatedProjects { get; init; }
+    public List<Project> AllocatedProjects { get; }
     
     public static Employee CreateNewEmployee(string name, string governmentIdentification)
     {
@@ -18,7 +18,7 @@ public class Employee : BaseEntity<long>
         Id = id;
         Name = name;
         GovernmentIdentification = governmentIdentification;
-        TimeSheet = timeSheetEntity ?? new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>());
+        TimeSheet = timeSheetEntity;
         AllocatedProjects = allocatedProjects ?? new List<Project>();
     }
 

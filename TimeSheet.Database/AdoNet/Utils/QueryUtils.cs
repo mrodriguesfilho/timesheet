@@ -1,12 +1,10 @@
-using Microsoft.Extensions.Logging.Abstractions;
-
 namespace TimeSheet.Database.AdoNet.Utils;
 
 public static class QueryUtils
 {
     public static string ToStringSingleQuoted(this object input)
     {
-        return input is null ? "null" : $"'{input}'";
+        return $"'{input}'";
     }
 
     public static string ToDateTimeStyle(this DateTime datetime)

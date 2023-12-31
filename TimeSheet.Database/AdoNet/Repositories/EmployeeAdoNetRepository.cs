@@ -84,7 +84,7 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
     private async Task UpdateEmployeeProjects(Employee employee)
     {
         var stringBuilder = new StringBuilder();
-        var dataBaseResult = await _databaseAdapter.ExecuteQueryAsync<EmployeeProjectModel>(
+        var dataBaseResult = await _databaseAdapter.ExecuteQueryAsync(
             string.Format(EmployeeProjectsQueries.SELECT_EMPLOYEE_ALLOCATED_PROJECTS_BY_ID_EMPLOYEE, employee.Id),
             EmployeeProjectMapper.Map);
 
@@ -147,7 +147,7 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
         if (employeeModel is null) return null;
         
         var allocatedProjectsDatabaseResult =
-            await _databaseAdapter.ExecuteQueryAsync<ProjectModel>(
+            await _databaseAdapter.ExecuteQueryAsync(
                 string.Format(ProjectQueries.SELECT_ALLOCATED_PROJECTS_BY_EMPLOYEE_ID, employeeModel.Id),
                 ProjectModelMapper.MapWithAllocation);
 
@@ -177,14 +177,14 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
         if (employeeModel is null) return null;
         
         var allocatedProjectsDatabaseResult =
-            await _databaseAdapter.ExecuteQueryAsync<ProjectModel>(
+            await _databaseAdapter.ExecuteQueryAsync(
                 string.Format(
                     ProjectQueries.SELECT_ALLOCATED_PROJECTS_BY_EMPLOYEE_ID,
                     employeeModel.Id),
                 ProjectModelMapper.MapWithAllocation);
 
         var timeSheetEntriesDatabaseResult =
-            await _databaseAdapter.ExecuteQueryAsync<TimeSheetEntryModel>(
+            await _databaseAdapter.ExecuteQueryAsync(
                 string.Format(
                     TimeSheetEntryQueries.SELECT_ENTRIES_BY_DATE,
                     employeeModel.Id,

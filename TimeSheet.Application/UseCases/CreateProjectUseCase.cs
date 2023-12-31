@@ -9,8 +9,8 @@ namespace TimeSheet.Application.UseCases;
 
 public class CreateProjectUseCase : IUseCase<CreateProjectInput, Result<CreateProjectOutput>>
 {
-    private IProjectDao _projectDao;
-    private IProjectFactory _projectFactory;
+    private readonly IProjectDao _projectDao;
+    private readonly IProjectFactory _projectFactory;
     
     public CreateProjectUseCase(IProjectDao projectDao, IProjectFactory projectFactory)
     {

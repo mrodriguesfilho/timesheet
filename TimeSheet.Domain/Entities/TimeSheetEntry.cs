@@ -4,11 +4,10 @@ namespace TimeSheet.Domain.Entities;
 
 public class TimeSheetEntry : BaseEntity<long>
 {
-    public DateTime StartDate { get; init; }
+    public DateTime StartDate { get; }
     public DateTime? EndDate { get; private set; }
     public TimeSpan WorkedHours { get; private set; }
     public TimeSpan HoursAllocated { get; private set; }
-    public DateTime? LastHoursAlloactionDate { get; private set; }
     public TimeSpan HoursAvailableToAllocate => WorkedHours - HoursAllocated;
     public bool IsCompleted { get; private set; }
     
@@ -17,19 +16,16 @@ public class TimeSheetEntry : BaseEntity<long>
         StartDate = startDate;
     }
 
-    public TimeSheetEntry(DateTime startDate, DateTime? endDate, TimeSpan workedHours, TimeSpan hoursAllocated, bool isCompleted)
+    public TimeSheetEntry(DateTime startDate, DateTime? endDate, TimeSpan hoursAllocated)
     {
         StartDate = startDate;
-        EndDate = endDate;
-        WorkedHours = workedHours;
         HoursAllocated = hoursAllocated;
-        IsCompleted = isCompleted;
-        SetWorkedHours();
+        SetEndDate(endDate);
     }
     
-    public void SetEndDate(DateTime endDate)
+    public void SetEndDate(DateTime? endDate)
     {
-        if (IsCompleted) return;
+        if (endDate is null || endDate.GetValueOrDefault() == default || IsCompleted) return;
         
         EndDate = endDate;
         IsCompleted = true;
@@ -38,7 +34,7 @@ public class TimeSheetEntry : BaseEntity<long>
 
     private void SetWorkedHours()
     {
-        if(!IsCompleted || EndDate is null) WorkedHours = TimeSpan.Zero;
+        if(EndDate is null) WorkedHours = TimeSpan.Zero;
             
         WorkedHours = EndDate.GetValueOrDefault() - StartDate;
     }
@@ -47,6 +43,5 @@ public class TimeSheetEntry : BaseEntity<long>
     {
         HoursAllocated += hoursAvailableToAllocate;
         EntityStatus = EntityStatus.PendingCommit;
-        LastHoursAlloactionDate = DateTime.Now;
     }
 }

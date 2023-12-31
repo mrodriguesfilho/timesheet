@@ -35,11 +35,12 @@ public class PostgresSqlAdapter : IDatabaseAdapter
         }
         catch (Exception e)
         {
-            return DatabaseResult.Fail<int>(0, $"Failed to run {nameof(ExecuteNonQueryAsync)}", e);
+            return DatabaseResult.Fail(0, $"Failed to run {nameof(ExecuteNonQueryAsync)}", e);
         }
         finally
         {
-            _npgsqlConnectionPool.Add(command.Connection);
+            if(command.Connection is not null)
+                _npgsqlConnectionPool.Add(command.Connection);
         }
     }
 
@@ -66,11 +67,12 @@ public class PostgresSqlAdapter : IDatabaseAdapter
         }
         catch (Exception e)
         {
-            return DatabaseResult.Fail<List<T>>(default(List<T>), $"Failed to run {nameof(ExecuteQueryAsync)}", e);
+            return DatabaseResult.Fail<List<T>>(default, $"Failed to run {nameof(ExecuteQueryAsync)}", e);
         }
         finally
         {
-            _npgsqlConnectionPool.Add(command.Connection);
+            if(command.Connection is not null)
+                _npgsqlConnectionPool.Add(command.Connection);
         }
     }
 
@@ -89,7 +91,8 @@ public class PostgresSqlAdapter : IDatabaseAdapter
         }
         finally
         {
-            _npgsqlConnectionPool.Add(command.Connection);
+            if(command.Connection is not null)
+                _npgsqlConnectionPool.Add(command.Connection);
         }
     }
 

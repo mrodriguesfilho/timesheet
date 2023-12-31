@@ -22,7 +22,7 @@ public class EmployeeBuilder
     
     public Employee Build(EmployeeModel employeeModel)
     {
-        List<Project> projects = null;
+        List<Project> projects = new();
         TimeSheetEntity timeSheetEntity = new();
         
         if (_projectModelList is not null)
@@ -40,9 +40,7 @@ public class EmployeeBuilder
             var timeSheetEntryList = _timeSheetEntryModelList.ConvertAll(timeEntry => new TimeSheetEntry(
                     timeEntry.WorkStartedAt,
                     timeEntry.WorkEndendAt,
-                    timeEntry.WorkedHours,
-                    timeEntry.AllocatedHours,
-                    timeEntry.IsCompleted
+                    timeEntry.AllocatedHours
                 ));
 
             var timeSheetEntriesByDay = new Dictionary<DateTime, List<TimeSheetEntry>>();

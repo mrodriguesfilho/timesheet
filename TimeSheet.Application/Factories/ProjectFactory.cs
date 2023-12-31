@@ -6,7 +6,7 @@ namespace TimeSheet.Application.Factories;
 
 public class ProjectFactory : IProjectFactory
 {
-    private IProjectDao _projectDao;
+    private readonly IProjectDao _projectDao;
 
     public ProjectFactory(IProjectDao projectDao)
     {
@@ -31,7 +31,7 @@ public class ProjectFactory : IProjectFactory
         return project;
     }
 
-    public async Task<Project?> GetProjectInstance(string ticker, string name = "")
+    private async Task<Project?> GetProjectInstance(string ticker, string name = "")
     {
         var project = await _projectDao.GetByTicker(ticker);
 
