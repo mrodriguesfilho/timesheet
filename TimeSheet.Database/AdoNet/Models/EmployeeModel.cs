@@ -1,4 +1,4 @@
-namespace TimeSheet.Database.Models;
+namespace TimeSheet.Database.AdoNet.Models;
 
 public class EmployeeModel
 {

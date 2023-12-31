@@ -18,7 +18,7 @@ public class Employee : BaseEntity<long>
         Id = id;
         Name = name;
         GovernmentIdentification = governmentIdentification;
-        TimeSheet = new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>());
+        TimeSheet = timeSheetEntity ?? new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>());
         AllocatedProjects = allocatedProjects ?? new List<Project>();
     }
 
@@ -54,7 +54,7 @@ public class Employee : BaseEntity<long>
         AllocatedProjects[projectIndex].AllocateHours(dayOfWork, hoursToAllocate, timeSheetEntriesOfTheDay);
     }
 
-    public Dictionary<DateTime, TimeSpan> GetHoursAllocatedByProjectTicker(string projectTicker)
+    public Dictionary<DateTime, TimeSpan>  GetHoursAllocatedByProjectTicker(string projectTicker)
     {
         var project = AllocatedProjects.FirstOrDefault(x => x.Ticker == projectTicker);
         return project?.WorkedHoursByDay;

@@ -1,7 +1,7 @@
-using TimeSheet.Database.Models;
+using TimeSheet.Database.AdoNet.Models;
 using TimeSheet.Domain.Entities;
 
-namespace TimeSheet.Database.Builders;
+namespace TimeSheet.Database.AdoNet.Builders;
 
 public class EmployeeBuilder
 {
@@ -23,7 +23,7 @@ public class EmployeeBuilder
     public Employee Build(EmployeeModel employeeModel)
     {
         List<Project> projects = null;
-        TimeSheetEntity timeSheetEntity = null;
+        TimeSheetEntity timeSheetEntity = new();
         
         if (_projectModelList is not null)
         {
@@ -45,14 +45,23 @@ public class EmployeeBuilder
                     timeEntry.IsCompleted
                 ));
 
-            var timeSheet = new TimeSheetEntity();
+            var timeSheetEntriesByDay = new Dictionary<DateTime, List<TimeSheetEntry>>();
+            foreach (var timeSheetEntry in timeSheetEntryList)
+            {
+                if (timeSheetEntriesByDay.TryGetValue(timeSheetEntry.StartDate.Date, out var timeSheetEntries))
+                    timeSheetEntries.Add(timeSheetEntry);
+                
+                timeSheetEntriesByDay.Add(timeSheetEntry.StartDate.Date, new List<TimeSheetEntry>(){ timeSheetEntry });
+            }
+
+            timeSheetEntity = new TimeSheetEntity(timeSheetEntriesByDay);
         }
         
         var employee = new Employee(
             employeeModel.Id,
             employeeModel.Name,
             employeeModel.GovernmentIdentification,
-            new TimeSheetEntity(new Dictionary<DateTime, List<TimeSheetEntry>>()),
+            timeSheetEntity,
             projects);
         
         return employee;

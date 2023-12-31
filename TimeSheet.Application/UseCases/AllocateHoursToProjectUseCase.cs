@@ -23,8 +23,8 @@ public class AllocateHoursToProjectUseCase : IUseCase<AllocateHoursToProjectInpu
     {
         var employee = await _employeeFactory.CreateWithTimeSheetEntries(
             allocateEmployeeToProjectInput.GovernmentIdentification,
-            allocateEmployeeToProjectInput.Date,
-            allocateEmployeeToProjectInput.Date.AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(999));
+            allocateEmployeeToProjectInput.WorkDay,
+            allocateEmployeeToProjectInput.WorkDay.AddHours(23).AddMinutes(59).AddSeconds(59).AddMilliseconds(999));
 
         if (employee is null)
             return Result.Fail(default(AllocateHoursToProjectOutput),
@@ -32,10 +32,10 @@ public class AllocateHoursToProjectUseCase : IUseCase<AllocateHoursToProjectInpu
 
         employee.AllocateHoursToProject(
             allocateEmployeeToProjectInput.Ticker,
-            allocateEmployeeToProjectInput.Date,
-            allocateEmployeeToProjectInput.HoursToAllocates);
+            allocateEmployeeToProjectInput.WorkDay,
+            allocateEmployeeToProjectInput.HoursToAllocate);
 
-        await _employeeRepository.UpdateProjectAllocatedHours(employee, allocateEmployeeToProjectInput.Ticker, allocateEmployeeToProjectInput.Date);
+        await _employeeRepository.UpdateProjectAllocatedHours(employee, allocateEmployeeToProjectInput.Ticker, allocateEmployeeToProjectInput.WorkDay);
 
         var allocateHoursToProjectOutput = EmployeeMapper.MapToAllocateHoursToProjectOutput(employee);
         return Result.Ok(allocateHoursToProjectOutput);

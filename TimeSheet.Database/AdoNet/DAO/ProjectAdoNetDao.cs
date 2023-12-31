@@ -1,7 +1,7 @@
 using TimeSheet.Database.AdoNet.Adapters.Interface;
+using TimeSheet.Database.AdoNet.Mappers;
+using TimeSheet.Database.AdoNet.Models;
 using TimeSheet.Database.AdoNet.Queries;
-using TimeSheet.Database.ModelMappers;
-using TimeSheet.Database.Models;
 using TimeSheet.Domain.Entities;
 using TimeSheet.Domain.Interfaces;
 

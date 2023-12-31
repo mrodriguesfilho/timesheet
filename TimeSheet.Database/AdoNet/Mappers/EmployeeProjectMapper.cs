@@ -1,8 +1,7 @@
 using System.Data;
-using TimeSheet.Database.Extensions;
-using TimeSheet.Database.Models;
+using TimeSheet.Database.AdoNet.Models;
 
-namespace TimeSheet.Database.ModelMappers;
+namespace TimeSheet.Database.AdoNet.Mappers;
 
 public static class EmployeeProjectMapper
 {

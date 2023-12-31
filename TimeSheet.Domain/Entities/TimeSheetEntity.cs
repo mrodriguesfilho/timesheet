@@ -6,7 +6,7 @@ public class TimeSheetEntity
 
     public TimeSheetEntity()
     {
-        
+        _timeEntriesByDay = new Dictionary<DateTime, List<TimeSheetEntry>>();
     }
     
     public TimeSheetEntity(Dictionary<DateTime, List<TimeSheetEntry>> timeEntriesByDay)
@@ -22,7 +22,7 @@ public class TimeSheetEntity
         {
             var lastTimeSheetEntry = entriesByDayList.Last();
 
-            if (!lastTimeSheetEntry.IsCompleted)
+            if (!lastTimeSheetEntry.IsCompleted) 
             {
                 lastTimeSheetEntry.SetEndDate(dateTime);
                 return;

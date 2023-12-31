@@ -24,6 +24,7 @@ public class TimeSheetEntry : BaseEntity<long>
         WorkedHours = workedHours;
         HoursAllocated = hoursAllocated;
         IsCompleted = isCompleted;
+        SetWorkedHours();
     }
     
     public void SetEndDate(DateTime endDate)
@@ -31,15 +32,15 @@ public class TimeSheetEntry : BaseEntity<long>
         if (IsCompleted) return;
         
         EndDate = endDate;
-        WorkedHours = CalculateTimeWorked();
         IsCompleted = true;
+        SetWorkedHours();
     }
 
-    private TimeSpan CalculateTimeWorked()
+    private void SetWorkedHours()
     {
-        if(EndDate is null) return TimeSpan.Zero;
+        if(!IsCompleted || EndDate is null) WorkedHours = TimeSpan.Zero;
             
-        return EndDate.GetValueOrDefault() - StartDate;
+        WorkedHours = EndDate.GetValueOrDefault() - StartDate;
     }
 
     public void AllocateHours(TimeSpan hoursAvailableToAllocate)

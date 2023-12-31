@@ -39,7 +39,7 @@ public class EmployeeInMemoryRepository : IEmployeeRepository
         return Task.CompletedTask;
     }
 
-    public Task UpdateProjectAllocatedHours(Employee employee, string projectTicker, DateTime dateTime)
+    public Task UpdateProjectAllocatedHours(Employee employee, string projectTicker, DateTime workDay)
     {
         var project = employee.AllocatedProjects.SingleOrDefault(x => x.Ticker == projectTicker);
 
