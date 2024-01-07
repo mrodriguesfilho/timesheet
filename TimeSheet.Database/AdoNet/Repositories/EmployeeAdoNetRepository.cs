@@ -2,7 +2,6 @@ using System.Text;
 using TimeSheet.Database.AdoNet.Adapters.Interface;
 using TimeSheet.Database.AdoNet.Builders;
 using TimeSheet.Database.AdoNet.Mappers;
-using TimeSheet.Database.AdoNet.Models;
 using TimeSheet.Database.AdoNet.Queries;
 using TimeSheet.Database.AdoNet.Utils;
 using TimeSheet.Database.Extensions;
@@ -151,13 +150,12 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
                 string.Format(ProjectQueries.SELECT_ALLOCATED_PROJECTS_BY_EMPLOYEE_ID, employeeModel.Id),
                 ProjectModelMapper.MapWithAllocation);
 
-        var employeeBuilder = new EmployeeBuilder();
+        var employeeBuilder = new EmployeeBuilder(employeeModel);
 
         if (allocatedProjectsDatabaseResult.Success)
             employeeBuilder = employeeBuilder.BuildWithAllocatedProjects(allocatedProjectsDatabaseResult.Value);
 
-        var employee = employeeBuilder
-            .Build(employeeModel);
+        var employee = employeeBuilder.Build();
 
         return employee;
     }
@@ -192,7 +190,7 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
                     endDate.ToDateTimeStyle()),
                 TimeSheetEntryMapper.Map);
 
-        var employeeBuilder = new EmployeeBuilder();
+        var employeeBuilder = new EmployeeBuilder(employeeModel);
 
         if (timeSheetEntriesDatabaseResult.Success)
             employeeBuilder = employeeBuilder.BuildWithTimeSheetEntries(timeSheetEntriesDatabaseResult.Value);
@@ -200,15 +198,17 @@ public class EmployeeAdoNetRepository : IEmployeeRepository
         if (allocatedProjectsDatabaseResult.Success)
             employeeBuilder = employeeBuilder.BuildWithAllocatedProjects(allocatedProjectsDatabaseResult.Value);
 
-        var employee = employeeBuilder
-            .Build(employeeModel);
+        var employee = employeeBuilder.Build();
 
         return employee;
     }
 
     private async Task AddNewTimeSheetEntries(Employee employee)
     {
-        var timeSheetEntriesNotAdded = employee.TimeSheet?.GetAllTimeSheetEntries().Where(x => x.Id == 0).ToList();
+        var timeSheetEntriesNotAdded = employee.TimeSheet?
+            .GetAllTimeSheetEntries()
+            .Where(x => x.Id == 0)
+            .ToList();
 
         if (timeSheetEntriesNotAdded is null || !timeSheetEntriesNotAdded.Any()) return;
 
