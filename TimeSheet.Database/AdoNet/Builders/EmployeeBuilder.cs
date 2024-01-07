@@ -5,8 +5,13 @@ namespace TimeSheet.Database.AdoNet.Builders;
 
 public class EmployeeBuilder
 {
+    private readonly EmployeeModel _employeeModel;
+    
     private List<ProjectModel>? _projectModelList;
     private List<TimeSheetEntryModel>? _timeSheetEntryModelList;
+
+    public EmployeeBuilder(EmployeeModel employeeModel)
+        => _employeeModel = employeeModel;
     
     public EmployeeBuilder BuildWithAllocatedProjects(List<ProjectModel> projectModelList)
     {
@@ -20,7 +25,7 @@ public class EmployeeBuilder
         return this;
     }
     
-    public Employee Build(EmployeeModel employeeModel)
+    public Employee Build()
     {
         List<Project> projects = new();
         TimeSheetEntity timeSheetEntity = new();
@@ -56,9 +61,9 @@ public class EmployeeBuilder
         }
         
         var employee = new Employee(
-            employeeModel.Id,
-            employeeModel.Name,
-            employeeModel.GovernmentIdentification,
+            _employeeModel.Id,
+            _employeeModel.Name,
+            _employeeModel.GovernmentIdentification,
             timeSheetEntity,
             projects);
         
